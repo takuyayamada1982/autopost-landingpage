@@ -1520,12 +1520,206 @@
     }
 
     /* reduced motion */
+    /* ==========================================
+       モバイル表示 崩れ対策（追加）
+       - 文字崩れ（強制改行/はみ出し）
+       - HeroモックのSNSアイコンが重なって見えにくい問題
+       ========================================== */
+
+    /* iPhone SE 等の小さめ端末まで視野に入れる */
+    @media (max-width: 480px) {
+      /* ヘッダー：横幅が足りない時に潰れない */
+      .header-content { gap: 10px; }
+      .logo { font-size: 1.15rem; }
+      .btn-header { padding: 0.55rem 1rem; font-size: 0.9rem; }
+
+      /* 文字：はみ出し/崩れを防ぐ */
+      .hero-title-main, .hero-title-sub { letter-spacing: -0.02em; }
+      .hero-description,
+      .section-title,
+      .section-subtitle,
+      .problem-text,
+      .usage-description,
+      .testimonial-quote,
+      .feature-item p,
+      .benefit p { overflow-wrap: anywhere; word-break: normal; }
+
+      /* Hero：スマホで上の固定ヘッダー分が詰まって見える対策 */
+      .hero { padding-top: calc(var(--spacing-2xl) + 78px); }
+      .hero-content { gap: var(--spacing-lg); }
+
+      /* Hot-mock：小画面で中身が窮屈になって重なるのを緩和 */
+      .hero-mockup { width: 240px; height: 480px; }
+      .mockup-screen-card { padding: 14px; }
+      .mockup-topbar { height: 50px; }
+      .mockup-screens { height: calc(100% - 50px); }
+      .mockup-app-title { font-size: 0.95rem; margin-bottom: 10px; }
+      .mockup-card { padding: 12px; }
+      .mockup-card-main { font-size: 0.95rem; }
+      .mockup-chip { font-size: 0.72rem; padding: 5px 8px; }
+      .mockup-actions { gap: 8px; }
+      .mockup-action { padding: 9px 8px; font-size: 0.85rem; }
+
+      /* ★重なり原因：SNSアイコンが大きく、画面要素の上に乗って見づらい
+         → 位置を下げてサイズも縮小 */
+      .mockup-icons { bottom: 10px; gap: 8px; }
+      .mockup-icons i {
+        font-size: 1.2rem;
+        padding: 8px;
+        border-radius: 14px;
+      }
+      .mockup-icons .x-icon {
+        width: 44px;
+        height: 44px;
+        padding: 8px;
+        border-radius: 14px;
+      }
+      .mockup-icons .x-icon svg { width: 22px; height: 22px; }
+    }
+
+    /* さらに小さい端末（幅360px以下）では、視認性優先でSNSアイコンを控えめに */
+    @media (max-width: 360px) {
+      .hero-mockup { width: 220px; height: 450px; }
+      .mockup-icons { opacity: 0.75; }
+      .mockup-icons i { font-size: 1.05rem; padding: 7px; }
+      .mockup-icons .x-icon { width: 40px; height: 40px; padding: 7px; }
+      .mockup-icons .x-icon svg { width: 20px; height: 20px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .hero-text, .hero-image { animation: none; }
       .scroll-indicator, .arrow-down i, .mockup-toast { animation: none; }
       .mockup-screen-card { transition: none; }
     }
+  
+
+    /* ==========================================
+       モバイル最適化（追加）
+       - スマホでの視認性/操作性（タップ領域・余白・文字サイズ）
+       - Safe Area（iPhoneノッチ）
+       - 固定ヘッダー/ボタンの詰まり対策
+       - 不要な改行の抑制（brをモバイルで非表示）
+       ========================================== */
+
+    /* iOS Safari: 勝手な文字拡大・横スクロール防止 */
+    html { -webkit-text-size-adjust: 100%; }
+    body { overflow-x: clip; }
+
+    /* 長い英数字/URLでも崩れない */
+    p, h1, h2, h3, h4, li, a, button { overflow-wrap: anywhere; word-break: normal; }
+
+    /* Safe-area 対応（iPhoneの下のホームバーなど） */
+    :root { --safe-bottom: env(safe-area-inset-bottom, 0px); --safe-top: env(safe-area-inset-top, 0px); }
+
+    /* モバイルは hover 前提の挙動を弱める */
+    @media (hover: none) {
+      .btn-primary:hover, .btn-outline:hover,
+      .problem-card:hover, .usage-step:hover, .feature-item:hover,
+      .testimonial-card:hover, .pricing-card:hover {
+        transform: none;
+        box-shadow: inherit;
+      }
+    }
+
+    /* 768px以下: 余白・文字・タップしやすさを強化 */
+    @media (max-width: 768px) {
+      .container { padding-left: 16px; padding-right: 16px; }
+
+      /* ヘッダー：押しやすい高さ + ぶつかり防止 */
+      .header { padding-top: var(--safe-top); }
+      .header-content { padding: 12px 0; }
+      .btn-header { min-height: 44px; }
+
+      /* Hero：見出しが詰まる/改行が多すぎる問題を抑制 */
+      .hero-title-main { line-height: 1.25; }
+      .hero-title-sub { line-height: 1.1; }
+      .hero-description { line-height: 1.85; }
+      .hero-description br { display: none; }
+
+      /* セクション見出し：可読性 */
+      .section-title { letter-spacing: -0.01em; }
+      .section-subtitle { line-height: 1.7; }
+
+      /* カード内のボタンやリンク：タップ領域 */
+      .btn { min-height: 44px; }
+      .faq-question { min-height: 56px; }
+
+      /* 料金プラン：おすすめカードの拡大でレイアウトが暴れない */
+      .pricing-recommended { transform: none; }
+      .pricing-recommended:hover { transform: none; }
+
+      /* 最終CTAのボタンは横幅いっぱいで見やすく */
+      .final-cta-buttons .btn { width: 100%; max-width: 520px; }
+
+      /* フッターリンク：押しやすく */
+      .footer-links a { padding: 10px 0; }
+    }
+
+    /* 480px以下: “指で操作する画面”向けにさらに調整 */
+    @media (max-width: 480px) {
+      /* テキストを読みやすく（小さすぎ防止） */
+      body { font-size: 16px; }
+      .hero-description { font-size: 1.02rem; }
+      .problem-text { font-size: 1.05rem; }
+
+      /* 価格などの数値が折り返して崩れない */
+      .price-amount { font-size: 2.65rem; }
+
+      /* 各カードの余白を最適化 */
+      .comparison-card, .problem-card, .feature-item, .testimonial-card, .pricing-card { border-radius: 18px; }
+
+      /* 画像（problem-photo）ラベルの読みやすさ */
+      .problem-photo-label { font-size: 0.92rem; }
+
+      /* 下部固定CTAの分だけ、ページ下の被りを避ける */
+      body { padding-bottom: calc(74px + var(--safe-bottom)); }
+    }
+
+    /* モバイル固定CTA（下部） */
+    .mobile-cta-bar {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(12px + var(--safe-bottom));
+      z-index: 1200;
+      display: none;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 30px rgba(17,24,39,0.16);
+      border: 1px solid rgba(17,24,39,0.10);
+    }
+
+    .mobile-cta-bar .btn {
+      width: 100%;
+      max-width: 520px;
+      min-height: 48px;
+      border-radius: 16px;
+    }
+
+    .mobile-cta-bar .mobile-cta-sub {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--gray-600);
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-cta-bar { display: flex; flex-direction: column; }
+    }
+
+    .mobile-cta-bar.is-hidden { display: none !important; }
+
+    /* 余白を詰めすぎない（フォーム風セクションが増えても崩れにくく） */
+    .cta-container { padding-left: 4px; padding-right: 4px; }
+
   </style>
 </head>
 <body>
@@ -2113,7 +2307,7 @@
 
       <div class="final-cta-buttons">
         <!-- Strikinglyの既存導線 -->
-        <a href="https://auto-post-studio.vercel.app/auth" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-xlarge">
+        <a href="https://autopoststudio.mystrikingly.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-xlarge">
           <i class="fas fa-camera" aria-hidden="true"></i> 無料で投稿作成を体験する
           <span class="btn-sub">（登録30秒・クレカ不要）</span>
         </a>
@@ -2131,8 +2325,8 @@
           <!-- TODO: 実URLに差し替え -->
           <a href="#contact">お問い合わせ</a>
           <a href="terms.html">利用規約</a>
-          <a href="tokusho.html">特定商取引法に基づく表示</a>
-          <a href="https://tymean82.wixsite.com/tymean82">運営会社</a>
+          <a href="#" onclick="alert('TODO: プライバシーポリシーは別ページに差し替えてください'); return false;">プライバシーポリシー</a>
+          <a href="#" onclick="alert('TODO: 運営会社情報は別ページに差し替えてください'); return false;">運営会社</a>
         </div>
         <div class="footer-social" aria-label="SNSリンク">
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
@@ -2149,6 +2343,14 @@
       <div class="footer-copyright"><p>&copy; 2024 AutoPost Studio. All rights reserved.</p></div>
     </div>
   </footer>
+
+  <!-- モバイル用：下部固定CTA（スマホで常に行動しやすく） -->
+  <div class="mobile-cta-bar" id="mobileCta" aria-label="モバイル用アクション">
+    <a href="#trial" class="btn btn-primary">
+      <i class="fas fa-camera" aria-hidden="true"></i> 無料で7日間試してみる
+    </a>
+    <span class="mobile-cta-sub">（登録30秒・クレカ不要）</span>
+  </div>
 
   <script>
     // ==========================================
@@ -2438,6 +2640,43 @@
     }
 
     // ==========================================
+    // モバイル固定CTA：表示/非表示制御
+    // - 1) 少しスクロールしたら表示
+    // - 2) 最終CTA（#trial）付近では隠す（被り防止）
+    // ==========================================
+    (function () {
+      var cta = document.getElementById('mobileCta');
+      if (!cta) return;
+
+      function isNearTrial() {
+        var target = document.getElementById('trial');
+        if (!target) return false;
+        var rect = target.getBoundingClientRect();
+        // 画面に近づいたら隠す（モバイルCTAと重なるのを防ぐ）
+        return rect.top < (window.innerHeight * 0.65);
+      }
+
+      function tick() {
+        var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+        // ほぼトップでは邪魔なので隠す
+        var shouldShow = y > 220 && !isNearTrial();
+        if (shouldShow) {
+          cta.classList.remove('is-hidden');
+        } else {
+          cta.classList.add('is-hidden');
+        }
+      }
+
+      // 初期
+      cta.classList.add('is-hidden');
+      tick();
+
+      // スクロール/リサイズ
+      window.addEventListener('scroll', tick, { passive: true });
+      window.addEventListener('resize', tick);
+    })();
+
+    // ==========================================
     // リロード時にトップへ
     // ==========================================
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -2445,6 +2684,3 @@
   </script>
 </body>
 </html>
-
-
-
