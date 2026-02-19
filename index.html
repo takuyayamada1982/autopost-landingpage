@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SNS投稿の文章作成を画像・動画・URLだけで1分に。地方議員・SNS初心者向けの簡単SNS投稿支援ツール『AutoPost Studio』" />
+  <meta name="theme-color" content="#FF6B35" />
+
+  <!-- OGP / Twitter -->
+  <meta property="og:title" content="AutoPost Studio - SNS投稿、もう10分も悩まない" />
+  <meta property="og:description" content="画像1枚で、Instagram・Facebook・Xの投稿文を自動生成。3タップで投稿完了。" />
+  <meta property="og:type" content="website" />
+  <!-- TODO: 公開URLに差し替え -->
+  <meta property="og:url" content="https://example.com/" />
+  <!-- TODO: OGP画像を用意して差し替え -->
+  <meta property="og:image" content="https://example.com/ogp.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <title>AutoPost Studio - SNS投稿、もう10分も悩まない</title>
+
+  <!-- Fonts / Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+
+  <!-- Structured Data (簡易) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AutoPost Studio",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "画像・動画・URLからSNS投稿文を自動生成。Instagram・Facebook・Xに最適化した文章を同時出力。",
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "JPY",
+      "price": "5000"
+    }
+  }
+  </script>
+
+  <style>
+    /* ==========================================
+       リセット & ベーススタイル
+       ========================================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* カラーパレット */
+      --primary-color: #FF6B35;
+      --secondary-color: #1DA1F2;
+      --instagram-start: #E1306C;
+      --instagram-end: #FD8D32;
+      --facebook-color: #4267B2;
+      --twitter-color: #1DA1F2;
+      --success-color: #10B981;
+      --warning-color: #F59E0B;
+      --danger-color: #EF4444;
+
+      /* グレースケール */
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+
+      /* フォント */
+      --font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+      /* スペーシング */
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 1rem;
+      --spacing-md: 1.5rem;
+      --spacing-lg: 2rem;
+      --spacing-xl: 3rem;
+      --spacing-2xl: 4rem;
+      --spacing-3xl: 6rem;
+
+      /* ボーダーラジウス */
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+
+      /* シャドウ */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+      /* トランジション */
+      --transition-fast: 150ms ease-in-out;
+      --transition-base: 300ms ease-in-out;
+      --transition-slow: 500ms ease-in-out;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-family);
+      line-height: 1.7;
+      color: var(--gray-800);
+      background-color: #fff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+    }
+
+    /* ==========================================
+       ヘッダー
+       ========================================== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+      z-index: 1000;
+      transition: var(--transition-base);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-sm) 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .logo i { font-size: 1.8rem; }
+
+    /* ==========================================
+       ボタン
+       ========================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-xs);
+      padding: 0.875rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: var(--radius-xl);
+      transition: var(--transition-base);
+      cursor: pointer;
+      border: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-color), #FF8C5A);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-outline {
+      background: white;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-header { padding: 0.625rem 1.5rem; font-size: 0.95rem; }
+    .btn-large { padding: 1.125rem 2.5rem; font-size: 1.125rem; }
+    .btn-xlarge { padding: 1.5rem 3rem; font-size: 1.25rem; }
+
+    /* ==========================================
+       セクション共通
+       ========================================== */
+    section { padding: var(--spacing-3xl) 0; }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: var(--spacing-md);
+      color: var(--gray-900);
+    }
+
+    .section-subtitle {
+      font-size: 1.25rem;
+      text-align: center;
+      color: var(--gray-600);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .cta-container { text-align: center; margin-top: var(--spacing-xl); }
+
+    /* ==========================================
+       Section 1: ファーストビュー
+       ========================================== */
+    .hero {
+      background: linear-gradient(135deg, #E0F2FE 0%, #DBEAFE 25%, #E0E7FF 50%, #FEF3C7 75%, #FED7AA 100%);
+      padding-top: calc(var(--spacing-3xl) + 60px);
+      padding-bottom: var(--spacing-3xl);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+    }
+
+    .hero-text { animation: fadeInUp 1s ease-out; }
+
+    .hero-title { margin-bottom: var(--spacing-lg); }
+
+    .hero-title-main {
+      display: block;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--gray-900);
+      line-height: 1.2;
+    }
+
+    .hero-title-sub {
+      display: block;
+      font-size: 3.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-color), var(--instagram-start));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .hero-description {
+      font-size: 1.25rem;
+      color: var(--gray-700);
+      margin-bottom: var(--spacing-xl);
+      line-height: 1.8;
+    }
+
+    .hero-features {
+      display: flex;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      color: var(--gray-700);
+      font-size: 0.95rem;
+    }
+
+    .hero-feature i { color: var(--success-color); font-size: 1.2rem; }
+
+    .hero-image { display: flex; justify-content: center; animation: fadeInUp 1s ease-out 0.3s backwards; }
+
+    /* Hot-mock風のスマホモック（軽量・画像不要） */
+    .hero-mockup {
+      position: relative;
+      width: 300px;
+      height: 600px;
+      background: linear-gradient(135deg, var(--secondary-color), var(--instagram-start));
+      border-radius: var(--radius-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+
+      /* draggable */
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .hero-mockup.is-dragging { cursor: grabbing; }
+
+    .hero-mockup::after {
+      content: '';
+      position: absolute;
+      inset: -120px;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.20), transparent 42%),
+                  radial-gradient(circle at 70% 60%, rgba(255,255,255,0.12), transparent 45%);
+      transform: translateZ(-1px);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .mockup-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      filter: blur(0.2px);
+      z-index: 3;
+    }
+
+    .mockup-screen-frame {
+      width: calc(100% - 22px);
+      height: calc(100% - 22px);
+      border-radius: calc(var(--radius-2xl) - 10px);
+      background: rgba(255,255,255,0.92);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
+      overflow: hidden;
+      position: relative;
+      transform: translateZ(0);
+    }
+
+    .mockup-topbar {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      background: linear-gradient(135deg, rgba(255,107,53,0.08), rgba(225,48,108,0.08));
+      border-bottom: 1px solid rgba(17,24,39,0.08);
+    }
+
+    .mockup-pill {
+      width: 86px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(17,24,39,0.15);
+    }
+
+    .mockup-dots { display: flex; gap: 6px; }
+    .mockup-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(17,24,39,0.20);
+    }
+
+    .mockup-screens {
+      position: relative;
+      height: calc(100% - 54px);
+    }
+
+    .mockup-screen-card {
+      position: absolute;
+      inset: 0;
+      padding: 18px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+
+    .mockup-screen-card.is-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mockup-app-title {
+      font-weight: 900;
+      color: var(--gray-900);
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+
+    .mockup-card {
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(17,24,39,0.10);
+      padding: 14px;
+    }
+
+    .mockup-card-label {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .mockup-card-main {
+      font-weight: 900;
+      color: var(--gray-900);
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .mockup-chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .mockup-chip {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(29,161,242,0.10);
+      color: var(--gray-800);
+      border: 1px solid rgba(29,161,242,0.18);
+    }
+
+    .mockup-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 900;
+      color: white;
+      background: linear-gradient(135deg, var(--primary-color), var(--instagram-end));
+    }
+
+    .mockup-toast {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.25);
+      color: var(--gray-800);
+      font-weight: 800;
+      animation: mockToast 1.2s ease-in-out infinite;
+    }
+
+    @keyframes mockToast {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .mockup-post {
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(17,24,39,0.10);
+      padding: 14px;
+    }
+
+    .mockup-post-h { font-weight: 900; color: var(--gray-900); margin-bottom: 8px; }
+    .mockup-post-p { color: var(--gray-700); font-weight: 600; line-height: 1.55; margin-bottom: 10px; }
+    .mockup-post-tags { color: rgba(225,48,108,0.9); font-weight: 900; }
+
+    .mockup-actions { display: flex; gap: 10px; margin-top: 12px; }
+    .mockup-action {
+      flex: 1;
+      text-align: center;
+      padding: 10px 10px;
+      border-radius: 12px;
+      font-weight: 900;
+      color: var(--gray-900);
+      background: rgba(17,24,39,0.06);
+      border: 1px solid rgba(17,24,39,0.08);
+    }
+
+    .mockup-chat { display: grid; gap: 10px; }
+    .mockup-bubble {
+      max-width: 92%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 700;
+      line-height: 1.5;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(17,24,39,0.08);
+    }
+
+    .mockup-bubble.me {
+      margin-left: auto;
+      background: rgba(29,161,242,0.12);
+    }
+
+    .mockup-bubble.bot {
+      margin-right: auto;
+      background: rgba(255,107,53,0.10);
+    }
+
+    .mockup-input {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(17,24,39,0.06);
+      color: var(--gray-600);
+      font-weight: 700;
+      border: 1px solid rgba(17,24,39,0.08);
+    }
+
+    .mockup-icons { position: absolute; display: flex; gap: var(--spacing-md); bottom: 80px; z-index: 4; }
+
+    .mockup-icons i {
+      font-size: 3rem;
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(10px);
+    }
+
+    .mockup-icons .x-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(10px);
+    }
+    .mockup-icons .x-icon svg { width: 48px; height: 48px; }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: var(--spacing-xl);
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      transition: opacity var(--transition-base);
+    }
+
+    .scroll-indicator i { font-size: 2rem; color: var(--gray-600); }
+
+    /* ==========================================
+       Section 2: 共感パート
+       ========================================== */
+    .problems { background: white; }
+
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .problem-card {
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl);
+      text-align: center;
+      transition: var(--transition-base);
+    }
+
+    .problem-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--gray-300);
+    }
+
+    .problem-icon { margin-bottom: var(--spacing-md); display: flex; justify-content: center; }
+
+    /* 写真版：問題シーン */
+    .problem-photo-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: var(--spacing-md);
+    }
+    .problem-photo {
+      width: 100%;
+      max-width: 260px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      /* LP全体の色味に寄せる */
+      filter: saturate(1.05) contrast(1.02);
+      background: var(--gray-200);
+    }
+
+    /* 写真に軽いオーバーレイで統一感 */
+    .problem-photo-wrap {
+      position: relative;
+    }
+    .problem-photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.45) 100%);
+      pointer-events: none;
+    }
+
+    /* 困っている状況を明確にするラベル */
+    .problem-photo-label {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      right: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+
+    .problem-text { font-size: 1.1rem; color: var(--gray-700); font-weight: 500; }
+
+    .problems-solution { text-align: center; margin-top: var(--spacing-2xl); }
+
+    .arrow-down { margin-bottom: var(--spacing-md); }
+
+    .arrow-down i { font-size: 3rem; color: var(--primary-color); animation: bounce 2s infinite; }
+
+    .solution-text { font-size: 1.5rem; color: var(--gray-600); margin-bottom: var(--spacing-sm); }
+
+    .solution-title {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-color), var(--instagram-start));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ==========================================
+       Section 3: 工数比較
+       ========================================== */
+    .comparison { background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); }
+
+    .comparison-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      align-items: start;
+    }
+
+    .comparison-card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .comparison-chatgpt { border: 2px solid var(--gray-300); }
+
+    .comparison-autopost { border: 3px solid var(--primary-color); position: relative; }
+
+    .comparison-autopost::before {
+      content: '✨ おすすめ';
+      position: absolute;
+      top: -15px;
+      right: var(--spacing-lg);
+      background: var(--primary-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .comparison-header { margin-bottom: var(--spacing-lg); }
+
+    .comparison-header h3 {
+      font-size: 1.75rem;
+      font-weight: 900;
+      margin-bottom: var(--spacing-sm);
+      color: var(--gray-900);
+    }
+
+    .comparison-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .badge-gray { background: var(--gray-200); color: var(--gray-700); }
+    .badge-primary { background: linear-gradient(135deg, var(--primary-color), var(--instagram-end)); color: white; }
+
+    .comparison-steps { margin-bottom: var(--spacing-lg); }
+
+    .step {
+      display: flex;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-sm);
+      border-radius: var(--radius-lg);
+      background: var(--gray-50);
+    }
+
+    .step-highlight {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(253, 141, 50, 0.1));
+      border: 2px solid var(--primary-color);
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--gray-600);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .step-highlight .step-number { background: linear-gradient(135deg, var(--primary-color), var(--instagram-end)); }
+
+    .step-content h4 { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.25rem; }
+    .step-note { font-size: 0.9rem; color: var(--gray-600); }
+
+    .comparison-time {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-md);
+      background: var(--gray-100);
+      border-radius: var(--radius-lg);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .time-highlight { background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(253, 141, 50, 0.2)); }
+
+    .time-saved {
+      background: var(--success-color);
+      color: white;
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      margin-left: var(--spacing-sm);
+    }
+
+    .vs-badge {
+      align-self: center;
+      background: var(--gray-900);
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 900;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .comparison-benefits {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-xl);
+      margin-top: var(--spacing-xl);
+      box-shadow: var(--shadow-md);
+    }
+
+    .benefits-title { font-size: 1.75rem; font-weight: 900; margin-bottom: var(--spacing-lg); text-align: center; color: var(--gray-900); }
+    .benefits-grid { display: grid; gap: var(--spacing-md); }
+
+    .benefit-item { display: flex; gap: var(--spacing-md); align-items: start; }
+    .benefit-item i { color: var(--success-color); font-size: 1.5rem; flex-shrink: 0; }
+    .benefit-item p { font-size: 1.1rem; color: var(--gray-700); }
+
+    /* ==========================================
+       Section 4: 3ステップ利用シーン
+       ========================================== */
+    .usage-steps { background: white; }
+    .steps-container { max-width: 800px; margin: 0 auto; }
+
+    .usage-step {
+      background: linear-gradient(135deg, var(--gray-50), white);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      transition: var(--transition-base);
+    }
+
+    .usage-step:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-color);
+    }
+
+    .usage-step-header { text-align: center; margin-bottom: var(--spacing-lg); }
+
+    .usage-step-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-color), var(--instagram-end));
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: var(--radius-xl);
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .usage-step-header h3 { font-size: 1.75rem; font-weight: 900; color: var(--gray-900); }
+
+    .usage-step-content { text-align: center; }
+
+    .usage-mockup { margin-bottom: var(--spacing-lg); }
+
+    .mockup-screen {
+      background: linear-gradient(135deg, var(--secondary-color), var(--instagram-start));
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-2xl);
+      color: white;
+      margin: 0 auto;
+      max-width: 400px;
+    }
+
+    /* STEP1: ドラッグ&ドロップではなく「選択してアップ」 */
+    .mockup-upload { display: grid; gap: 10px; }
+    .mockup-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.14);
+      color: white;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+    .mockup-upload-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.22); }
+
+    .mockup-upload-filename {
+      font-size: 0.95rem;
+      font-weight: 700;
+      opacity: 0.92;
+      min-height: 1.2em;
+    }
+
+    .mockup-screen i { font-size: 4rem; margin-bottom: var(--spacing-md); }
+    .mockup-screen p { font-size: 1.25rem; font-weight: 700; }
+
+    .sns-preview {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      padding: var(--spacing-lg);
+      background: white;
+      border-radius: var(--radius-lg);
+      margin: 0 auto;
+      max-width: 500px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sns-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md);
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+    }
+
+    /* STEP2: SNSごとのトーン例（アイコンあり） */
+
+    /* X のSVGアイコン用（FontAwesomeが出ない環境の保険） */
+    .x-inline {
+      width: 2rem;
+      height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #111827; /* X公式ブラックに戻す */
+      flex-shrink: 0;
+    }
+    .x-inline svg { width: 100%; height: 100%; }
+    .x-inline svg { width: 100%; height: 100%; }
+
+    .sns-item i { font-size: 2rem; }
+    .sns-item:nth-child(1) { color: var(--instagram-start); }
+    .sns-item:nth-child(2) { color: var(--facebook-color); }
+    .sns-item:nth-child(3) { color: var(--gray-900); }
+
+    .usage-description { font-size: 1.1rem; color: var(--gray-700); line-height: 1.8; }
+
+    .step-arrow { text-align: center; margin: var(--spacing-lg) 0; }
+    .step-arrow i { font-size: 2.5rem; color: var(--primary-color); }
+
+    /* ==========================================
+       Section 5: ターゲット別訴求
+       ========================================== */
+    .target-audience { background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%); }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .audience-card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition-base);
+    }
+
+    .audience-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-xl); }
+
+    .audience-header { text-align: center; margin-bottom: var(--spacing-lg); }
+    .audience-icon { font-size: 4rem; margin-bottom: var(--spacing-md); }
+    .audience-header h3 { font-size: 1.75rem; font-weight: 900; color: var(--gray-900); }
+
+    .audience-benefits { margin-bottom: var(--spacing-xl); }
+
+    .benefit {
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: start;
+      padding: var(--spacing-md) 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .benefit:last-child { border-bottom: none; }
+    .benefit i { color: var(--success-color); font-size: 1.25rem; flex-shrink: 0; margin-top: 0.25rem; }
+    .benefit p { font-size: 1.05rem; color: var(--gray-700); }
+
+    .audience-testimonial {
+      background: var(--gray-50);
+      border-left: 4px solid var(--primary-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+    }
+
+    .testimonial-text { font-size: 1.05rem; color: var(--gray-700); line-height: 1.8; margin-bottom: var(--spacing-md); font-style: italic; }
+    .testimonial-author { font-size: 0.95rem; color: var(--gray-600); font-weight: 700; text-align: right; }
+
+    /* ==========================================
+       Section 6: 機能詳細
+       ========================================== */
+    .features { background: white; }
+
+    .features-highlights {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-2xl);
+      flex-wrap: wrap;
+    }
+
+    .feature-highlight { text-align: center; }
+
+    .feature-highlight i {
+      font-size: 4rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--instagram-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .feature-highlight h3 { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--spacing-xl);
+    }
+
+    .feature-item {
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl);
+      text-align: center;
+      transition: var(--transition-base);
+    }
+
+    .feature-item:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: var(--shadow-lg); }
+
+    .feature-icon { font-size: 3rem; margin-bottom: var(--spacing-md); }
+    .feature-icon i {
+      font-size: 3rem;
+      margin: 0 0.25rem;
+    }
+
+    /* Section 6（機能詳細）: 添付スクショに合わせて、カード上部のアイコン色をオレンジで統一 */
+.features .feature-icon i,
+.features .feature-icon .x-inline {
+  color: var(--primary-color);
+}
+.features .feature-icon .x-inline svg {
+  width: 3rem;
+  height: 3rem;
+}
+
+
+    .feature-item h3 { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: var(--spacing-sm); }
+    .feature-item p { font-size: 1rem; color: var(--gray-600); line-height: 1.7; }
+
+    /* ==========================================
+       Section 7: 導入実績・ユーザーの声
+       ========================================== */
+    .testimonials { background: linear-gradient(135deg, #E0E7FF 0%, #DDD6FE 100%); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .stat-item {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-item i { font-size: 3rem; color: var(--primary-color); margin-bottom: var(--spacing-md); }
+    .stat-item p { font-size: 1.05rem; color: var(--gray-700); line-height: 1.7; }
+    .stat-item strong { color: var(--primary-color); font-size: 1.25rem; }
+
+    .testimonials-subtitle { font-size: 1.75rem; font-weight: 900; text-align: center; margin-bottom: var(--spacing-xl); color: var(--gray-900); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-base);
+    }
+
+    .testimonial-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-xl); }
+
+    .stars { display: flex; gap: 0.25rem; margin-bottom: var(--spacing-md); }
+    .stars i { color: #FCD34D; font-size: 1.25rem; }
+
+    .testimonial-quote { font-size: 1.05rem; color: var(--gray-700); line-height: 1.8; margin-bottom: var(--spacing-md); font-style: italic; }
+
+    /* ==========================================
+       Section 8: 料金プラン
+       ========================================== */
+    .pricing { background: white; }
+
+    .pricing-lead{
+      text-align:center;
+      font-weight:800;
+      margin: 0 auto var(--spacing-xl);
+      color: var(--gray-700);
+      max-width: 900px;
+    }
+
+    /* ==========================================
+       SaaSっぽさ強化: 信頼ブロック（最終CTAの直前に表示）
+       ========================================== */
+    .cta-trust{
+      display:flex;
+      justify-content:center;
+      gap: 22px;
+      margin: 28px 0 10px;
+      flex-wrap:wrap;
+    }
+
+    .trust-item{
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 16px 18px;
+      border-radius: 16px;
+      text-align:center;
+      color: white;
+      min-width: 220px;
+      box-shadow: 0 10px 20px rgba(17,24,39,0.12);
+    }
+
+    .trust-item i{
+      font-size: 22px;
+      margin-bottom: 8px;
+      opacity: 0.95;
+    }
+
+    .trust-item p{ line-height: 1.35; font-weight: 800; }
+    .trust-item small{ display:block; opacity:0.9; font-weight:700; margin-top:6px; }
+
+    .btn-sub{
+      display:block;
+      font-size: 0.9rem;
+      opacity: 0.92;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    /* モバイル: 信頼ブロックを詰める */
+    @media (max-width: 480px){
+      .trust-item{ min-width: 100%; }
+    }
+
+    /* ===== LP完成に向けた追加: フォーム（削除済み） ===== */
+
+    /* キャンペーン：ページトーン（オレンジ）に合わせて華やかに */
+    .campaign-banner {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.22), transparent 40%),
+                  linear-gradient(135deg, var(--primary-color), #FF8C5A);
+      color: white;
+      padding: 1.75rem 1.5rem;
+      border-radius: var(--radius-2xl);
+      text-align: center;
+      margin-bottom: var(--spacing-2xl);
+      box-shadow: var(--shadow-lg);
+      border: 2px solid rgba(255,255,255,0.25);
+    }
+
+    .campaign-banner::before {
+      content: '';
+      position: absolute;
+      inset: -120px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.22), transparent 38%),
+        radial-gradient(circle at 80% 35%, rgba(255,255,255,0.16), transparent 42%),
+        radial-gradient(circle at 55% 85%, rgba(255,255,255,0.12), transparent 40%);
+      transform: rotate(12deg);
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    /* 右上のリボン */
+    .campaign-ribbon {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(17,24,39,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      box-shadow: 0 10px 20px rgba(17,24,39,0.12);
+    }
+
+    .campaign-ribbon i { font-size: 1.05rem; }
+
+    .campaign-title {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 1.35rem;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 8px 20px rgba(17,24,39,0.20);
+    }
+
+    .campaign-title i { font-size: 1.4rem; }
+
+    .campaign-copy {
+      position: relative;
+      z-index: 1;
+      font-size: 1.1rem;
+      font-weight: 800;
+      line-height: 1.7;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .campaign-copy .strike {
+      text-decoration: line-through;
+      opacity: 0.8;
+      font-weight: 900;
+    }
+
+    .campaign-copy .highlight {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.28);
+      font-size: 1.85rem;
+      font-weight: 900;
+      line-height: 1.2;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10);
+      margin: 0 0.15rem;
+    }
+
+    .campaign-sub {
+      position: relative;
+      z-index: 1;
+      margin-top: 0.55rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      opacity: 0.95;
+    }
+
+    /* ふわっと光る演出 */
+    .campaign-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      background:
+        radial-gradient(circle at 15% 70%, rgba(255,255,255,0.22), transparent 40%),
+        radial-gradient(circle at 75% 20%, rgba(255,255,255,0.18), transparent 35%);
+      animation: campaignGlow 2.6s ease-in-out infinite;
+    }
+
+    @keyframes campaignGlow {
+      0%, 100% { transform: translateY(0); filter: blur(0px); }
+      50% { transform: translateY(-6px); filter: blur(0.4px); }
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .pricing-card {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-xl);
+      position: relative;
+      transition: var(--transition-base);
+    }
+
+    .pricing-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-xl); }
+
+    .pricing-recommended { border: 3px solid var(--primary-color); transform: scale(1.05); }
+    .pricing-recommended:hover { transform: scale(1.08) translateY(-5px); }
+
+    .recommended-badge {
+      position: absolute;
+      top: -15px;
+      right: var(--spacing-lg);
+      background: var(--primary-color);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: var(--radius-xl);
+      font-weight: 700;
+    }
+
+    .pricing-header {
+      text-align: center;
+      padding-bottom: var(--spacing-lg);
+      border-bottom: 2px solid var(--gray-200);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .pricing-header h3 { font-size: 1.75rem; font-weight: 900; color: var(--gray-900); margin-bottom: var(--spacing-md); }
+
+    .price { margin: var(--spacing-md) 0; }
+    .price-amount { font-size: 3rem; font-weight: 900; color: var(--primary-color); }
+    .price-currency { font-size: 1.25rem; color: var(--gray-600); font-weight: 700; }
+    .price-note { font-size: 0.95rem; color: var(--gray-600); }
+
+    .pricing-features { list-style: none; margin-bottom: var(--spacing-lg); }
+
+    .pricing-features li {
+      display: flex;
+      gap: var(--spacing-sm);
+      align-items: start;
+      padding: var(--spacing-sm) 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .pricing-features li:last-child { border-bottom: none; }
+
+    .pricing-features i {
+      color: var(--success-color);
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .pricing-note { font-size: 0.9rem; color: var(--gray-600); text-align: center; margin-bottom: var(--spacing-md); }
+
+    .trial-info {
+      background: linear-gradient(135deg, var(--gray-50), white);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-xl);
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .trial-info h3 { font-size: 1.75rem; font-weight: 900; color: var(--gray-900); margin-bottom: var(--spacing-lg); }
+
+    .trial-features { display: flex; justify-content: center; gap: var(--spacing-xl); flex-wrap: wrap; }
+
+    .trial-feature { display: flex; align-items: center; gap: var(--spacing-sm); }
+    .trial-feature i { color: var(--success-color); font-size: 1.5rem; }
+    .trial-feature p { font-size: 1.05rem; color: var(--gray-700); font-weight: 500; }
+
+    /* ==========================================
+       Section 9: FAQ
+       ========================================== */
+    .faq { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); }
+
+    .faq-list { max-width: 900px; margin: 0 auto; }
+
+    .faq-item {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      margin-bottom: var(--spacing-md);
+      overflow: hidden;
+      transition: var(--transition-base);
+    }
+
+    .faq-item:hover { border-color: var(--primary-color); box-shadow: var(--shadow-md); }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-lg);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .faq-question h3 { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); }
+    .faq-question i { color: var(--primary-color); font-size: 1.25rem; transition: var(--transition-base); }
+
+    .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .faq-item.active .faq-answer { max-height: 500px; }
+
+    .faq-answer p { padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg); font-size: 1.05rem; color: var(--gray-700); line-height: 1.8; }
+
+    /* ==========================================
+       Section 10: 最終CTA
+       ========================================== */
+    .final-cta { background: linear-gradient(135deg, var(--primary-color), var(--instagram-start)); color: white; text-align: center; }
+    .final-cta-title { font-size: 3rem; font-weight: 900; margin-bottom: var(--spacing-md); }
+    .final-cta-subtitle { font-size: 1.5rem; margin-bottom: var(--spacing-xl); opacity: 0.95; }
+
+    .final-cta-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-2xl);
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .final-feature {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: rgba(255, 255, 255, 0.2);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(10px);
+    }
+
+    .final-feature i { font-size: 1.5rem; flex-shrink: 0; }
+    .final-feature p { font-size: 1.05rem; font-weight: 500; text-align: left; }
+
+    .final-cta-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .or-text { font-size: 1.25rem; font-weight: 700; margin: var(--spacing-sm) 0; }
+
+    /* ==========================================
+       フッター
+       ========================================== */
+    .footer { background: var(--gray-900); color: white; padding: var(--spacing-2xl) 0 var(--spacing-lg) 0; }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .footer-logo { display: flex; align-items: center; gap: var(--spacing-xs); font-size: 1.5rem; font-weight: 700; }
+    .footer-logo i { font-size: 2rem; color: var(--primary-color); }
+
+    .footer-links { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+
+    .footer-links a { color: var(--gray-300); text-decoration: none; transition: var(--transition-fast); }
+    .footer-links a:hover { color: white; }
+
+    .footer-social { display: flex; gap: var(--spacing-md); }
+
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      background: var(--gray-800);
+      border-radius: 50%;
+      color: white;
+      font-size: 1.25rem;
+      transition: var(--transition-base);
+    }
+
+    .footer-social a:hover { background: var(--primary-color); transform: translateY(-3px); }
+
+    .footer-copyright {
+      text-align: center;
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid var(--gray-800);
+      color: var(--gray-400);
+      font-size: 0.95rem;
+    }
+
+    /* ==========================================
+       アニメーション
+       ========================================== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* ==========================================
+       レスポンシブ
+       ========================================== */
+    @media (max-width: 768px) {
+      .section-title { font-size: 2rem; }
+      .section-subtitle { font-size: 1.1rem; }
+      .logo span { display: none; }
+      .hero { padding-top: calc(var(--spacing-2xl) + 60px); }
+      .hero-content { grid-template-columns: 1fr; text-align: center; }
+      .hero-title-main { font-size: 2rem; }
+      .hero-title-sub { font-size: 2.5rem; }
+      .hero-description { font-size: 1.1rem; }
+      .hero-features { justify-content: center; }
+      .hero-mockup { width: 250px; height: 500px; }
+      .mockup-icons i { font-size: 2rem; }
+      .comparison-container { grid-template-columns: 1fr; gap: var(--spacing-lg); }
+      .vs-badge { justify-self: center; }
+      .audience-grid { grid-template-columns: 1fr; }
+      .final-cta-title { font-size: 2rem; }
+      .final-cta-subtitle { font-size: 1.25rem; }
+      .final-cta-features { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      :root { --spacing-xl: 2rem; --spacing-2xl: 3rem; --spacing-3xl: 4rem; }
+      section { padding: var(--spacing-2xl) 0; }
+      .section-title { font-size: 1.75rem; }
+      .btn { padding: 0.75rem 1.25rem; font-size: 0.95rem; }
+      .btn-large { padding: 1rem 1.75rem; font-size: 1rem; }
+      .btn-xlarge { padding: 1.25rem 2rem; font-size: 1.1rem; }
+      .hero-title-main { font-size: 1.75rem; }
+      .hero-title-sub { font-size: 2rem; }
+      .hero-description { font-size: 1rem; }
+      .hero-mockup { width: 200px; height: 400px; }
+      .mockup-icons { gap: var(--spacing-sm); bottom: 60px; }
+      .mockup-icons i { font-size: 1.5rem; padding: var(--spacing-xs); }
+      .problems-grid { grid-template-columns: 1fr; }
+      .comparison-card { padding: var(--spacing-md); }
+      .step { flex-direction: column; text-align: center; }
+      .features-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-recommended { transform: scale(1); }
+      .pricing-recommended:hover { transform: scale(1.02) translateY(-5px); }
+      .final-cta-title { font-size: 1.5rem; }
+      .footer-content { grid-template-columns: 1fr; text-align: center; }
+      .footer-links { align-items: center; }
+      .footer-social { justify-content: center; }
+    }
+
+    @media (min-width: 1400px) {
+      .container { max-width: 1400px; }
+      .section-title { font-size: 3rem; }
+      .hero-title-main { font-size: 3.5rem; }
+      .hero-title-sub { font-size: 4rem; }
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-text, .hero-image { animation: none; }
+      .scroll-indicator, .arrow-down i, .mockup-toast { animation: none; }
+      .mockup-screen-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header class="header" aria-label="サイトヘッダー">
+    <div class="container">
+      <div class="header-content">
+        <a class="logo" href="#top" aria-label="AutoPost Studio トップへ">
+          <i class="fas fa-paper-plane" aria-hidden="true"></i>
+          <span>AutoPost Studio</span>
+        </a>
+        <a href="#trial" class="btn btn-primary btn-header">
+          <i class="fas fa-bolt" aria-hidden="true"></i> 無料トライアル
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section 1: ファーストビュー -->
+  <section class="hero" id="top">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">
+            <span class="hero-title-main">SNS投稿の文章、</span>
+            <span class="hero-title-sub">もう10分も悩まない</span>
+          </h1>
+          <p class="hero-description">
+            画像・動画・URLだけで、3つのSNS投稿文が自動生成。<br />
+            地方議員もSNS初心者も<br />
+            たった3タップで投稿完了。
+          </p>
+          <a href="#trial" class="btn btn-primary btn-large">
+            <i class="fas fa-camera" aria-hidden="true"></i> 無料で7日間試してみる
+          </a>
+          <div class="hero-features" aria-label="特徴">
+            <div class="hero-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><span>クレカ登録不要</span></div>
+            <div class="hero-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><span>Instagram・Facebook・X対応</span></div>
+          </div>
+        </div>
+        <div class="hero-image" aria-hidden="true">
+          <div class="hero-mockup" id="heroMock" role="img" aria-label="アプリ画面のモック（ドラッグで軽く動かせます）">
+            <div class="mockup-notch"></div>
+            <div class="mockup-screen-frame">
+              <div class="mockup-topbar">
+                <div class="mockup-pill"></div>
+                <div class="mockup-dots"><span></span><span></span><span></span></div>
+              </div>
+
+              <!-- Hot-mock風：画面が自動で切り替わる（軽量デモ） -->
+              <div class="mockup-screens" id="hero-screens">
+                <div class="mockup-screen-card is-active" data-screen="1">
+                  <div class="mockup-app-title">AutoPost Studio</div>
+                  <div class="mockup-card">
+                    <div class="mockup-card-label">写真を選択</div>
+                    <div class="mockup-card-main">活動写真をアップして投稿文生成</div>
+                    <div class="mockup-chip-row">
+                      <span class="mockup-chip">Instagram</span>
+                      <span class="mockup-chip">Facebook</span>
+                      <span class="mockup-chip">X</span>
+                    </div>
+                    <div class="mockup-cta">生成する</div>
+                  </div>
+                  <div class="mockup-toast">✅ 3SNS分を同時生成</div>
+                </div>
+
+                <div class="mockup-screen-card" data-screen="2">
+                  <div class="mockup-app-title">投稿プレビュー</div>
+                  <div class="mockup-post">
+                    <div class="mockup-post-h">📌 本日の活動報告</div>
+                    <div class="mockup-post-p">地域の皆さまと意見交換。いただいた声を整理して改善につなげます。</div>
+                    <div class="mockup-post-tags">#地域 #活動報告 #くらし</div>
+                  </div>
+                  <div class="mockup-actions">
+                    <span class="mockup-action">コピー</span>
+                    <span class="mockup-action">トーン変更</span>
+                  </div>
+                </div>
+
+                <div class="mockup-screen-card" data-screen="3">
+                  <div class="mockup-app-title">トーン調整</div>
+                  <div class="mockup-chat">
+                    <div class="mockup-bubble me">もう少しやさしい言い回しに</div>
+                    <div class="mockup-bubble bot">了解です。丁寧で親しみやすい文に整えました。</div>
+                    <div class="mockup-bubble bot">✅ 文章を更新しました</div>
+                  </div>
+                  <div class="mockup-input">メッセージを入力…</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mockup-icons" aria-hidden="true">
+              <i class="fab fa-instagram"></i>
+              <i class="fab fa-facebook"></i>
+              <span class="x-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" aria-label="X" focusable="false">
+                  <path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-7.1L5.9 22H2.8l7.3-8.4L0.9 2h6.4l4.4 6.4L18.9 2zm-1.1 18h1.7L6.1 4H4.2l13.6 16z"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator" aria-hidden="true">
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: 共感パート -->
+  <section class="problems">
+    <div class="container">
+      <h2 class="section-title">こんな経験、ありませんか?</h2>
+      <div class="problems-grid">
+        <div class="problem-card">
+          <div class="problem-photo-wrap">
+            <img class="problem-photo" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="文章が浮かばず頭を抱える人物" />
+            <span class="problem-photo-label">文章が思いつかない…</span>
+          </div>
+          <p class="problem-text">投稿したいけど<br />文章が浮かばない</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-photo-wrap">
+            <img class="problem-photo" src="https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f?q=80&w=1200&auto=format&fit=crop" alt="スマホを見て不安そうな人物" />
+            <span class="problem-photo-label">これで大丈夫かな…</span>
+          </div>
+          <p class="problem-text">何を書けば<br />いいか分からない...</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-photo-wrap">
+            <img class="problem-photo" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop" alt="PC画面を前に困惑する人物" />
+            <span class="problem-photo-label">操作が難しい…</span>
+          </div>
+          <p class="problem-text">ChatGPTも<br />使い方が難しい</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-photo-wrap">
+            <img class="problem-photo" src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1200&auto=format&fit=crop" alt="複数作業に疲れている人物" />
+            <span class="problem-photo-label">投稿が多すぎて大変…</span>
+          </div>
+          <p class="problem-text">3つのSNSに<br />別々に投稿が面倒...</p>
+        </div>
+      </div>
+      <div class="problems-solution">
+        <div class="arrow-down"><i class="fas fa-arrow-down" aria-hidden="true"></i></div>
+        <p class="solution-text">そんなあなたに</p>
+        <h3 class="solution-title">「AutoPost Studio」</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: 工数比較 -->
+  <section class="comparison">
+    <div class="container">
+      <h2 class="section-title">他のツールとの違いは?</h2>
+      <p class="section-subtitle">「タッチ数が圧倒的に少ない!」</p>
+
+      <div class="comparison-container">
+        <!-- ChatGPTの場合 -->
+        <div class="comparison-card comparison-chatgpt">
+          <div class="comparison-header">
+            <h3>ChatGPTの場合</h3>
+            <span class="comparison-badge badge-gray">5ステップ</span>
+          </div>
+          <div class="comparison-steps">
+            <div class="step"><div class="step-number">1</div><div class="step-content"><h4>プロンプト入力</h4><p class="step-note">← 考える時間が必要</p></div></div>
+            <div class="step"><div class="step-number">2</div><div class="step-content"><h4>画像をアップ</h4></div></div>
+            <div class="step"><div class="step-number">3</div><div class="step-content"><h4>出力文章を精査</h4><p class="step-note">← 使えるか判断</p></div></div>
+            <div class="step"><div class="step-number">4</div><div class="step-content"><h4>必要部分をコピー</h4></div></div>
+            <div class="step"><div class="step-number">5</div><div class="step-content"><h4>SNSへ貼り付け投稿</h4><p class="step-note">← SNS毎に繰り返し</p></div></div>
+          </div>
+          <div class="comparison-time"><i class="far fa-clock" aria-hidden="true"></i><span>約10〜15分</span></div>
+        </div>
+
+        <div class="vs-badge" aria-hidden="true">VS</div>
+
+        <!-- AutoPost Studioの場合 -->
+        <div class="comparison-card comparison-autopost">
+          <div class="comparison-header">
+            <h3>AutoPost Studio</h3>
+            <span class="comparison-badge badge-primary">3ステップ</span>
+          </div>
+          <div class="comparison-steps">
+            <div class="step step-highlight"><div class="step-number">1</div><div class="step-content"><h4>画像/動画を投稿</h4><p class="step-note">← ボタンで写真を選択</p></div></div>
+            <div class="step step-highlight"><div class="step-number">2</div><div class="step-content"><h4>投稿文をコピー</h4><p class="step-note">← 3SNS分同時生成!</p></div></div>
+            <div class="step step-highlight"><div class="step-number">3</div><div class="step-content"><h4>SNSへ貼り付け</h4></div></div>
+          </div>
+          <div class="comparison-time time-highlight"><i class="far fa-clock" aria-hidden="true"></i><span>約1〜3分</span><span class="time-saved">💡10分短縮!</span></div>
+        </div>
+      </div>
+
+      <div class="comparison-benefits">
+        <h3 class="benefits-title">✨ しかも...</h3>
+        <div class="benefits-grid">
+          <div class="benefit-item"><i class="fas fa-check-circle" aria-hidden="true"></i><p>Instagram、Facebook、X用にそれぞれ最適化された文章を自動生成</p></div>
+          <div class="benefit-item"><i class="fas fa-check-circle" aria-hidden="true"></i><p>トーン変更もチャットで即対応</p></div>
+          <div class="benefit-item"><i class="fas fa-check-circle" aria-hidden="true"></i><p>動画からも文章生成可能（Pro）</p></div>
+        </div>
+      </div>
+
+      <div class="cta-container">
+        <a href="#trial" class="btn btn-primary btn-large">今すぐ無料で試す</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: 3ステップ利用シーン -->
+  <section class="usage-steps">
+    <div class="container">
+      <h2 class="section-title">使い方はたったの3ステップ</h2>
+
+      <div class="steps-container">
+        <div class="usage-step">
+          <div class="usage-step-header">
+            <span class="usage-step-badge">STEP 1</span>
+            <h3>📸 画像・動画をアップ</h3>
+          </div>
+          <div class="usage-step-content">
+            <div class="usage-mockup">
+              <div class="mockup-screen mockup-upload">
+                <i class="fas fa-image" aria-hidden="true"></i>
+                <p>写真を選択してアップ</p>
+                <button type="button" class="mockup-upload-btn" id="mockUploadBtn">
+                  <i class="fas fa-folder-open" aria-hidden="true"></i> 写真を選ぶ
+                </button>
+                <input id="mockUploadInput" type="file" accept="image/*,video/*" hidden />
+                <div class="mockup-upload-filename" id="mockUploadName" aria-live="polite"></div>
+              </div>
+            </div>
+            <p class="usage-description">ボタンを押して写真（または動画）を選ぶだけ。<br />アップ後は自動で投稿文を生成します。</p>
+          </div>
+        </div>
+
+        <div class="step-arrow" aria-hidden="true"><i class="fas fa-arrow-down"></i></div>
+
+        <div class="usage-step">
+          <div class="usage-step-header">
+            <span class="usage-step-badge">STEP 2</span>
+            <h3>✨ 自動で3SNS分生成</h3>
+          </div>
+          <div class="usage-step-content">
+            <div class="usage-mockup">
+              <div class="sns-preview">
+                <div class="sns-item"><i class="fab fa-instagram" aria-hidden="true"></i><span>絵文字多め</span></div>
+                <div class="sns-item"><i class="fab fa-facebook" aria-hidden="true"></i><span>丁寧な文章</span></div>
+                <div class="sns-item">
+                  <span class="x-inline" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="img" aria-label="X" focusable="false">
+                      <path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-7.1L5.9 22H2.8l7.3-8.4L0.9 2h6.4l4.4 6.4L18.9 2zm-1.1 18h1.7L6.1 4H4.2l13.6 16z"/>
+                    </svg>
+                  </span>
+                  <span>短く要点だけの投稿</span>
+                </div>
+              </div>
+            </div>
+            <p class="usage-description"><strong>💬 トーン調整もチャットで</strong><br />「もっとフランクに」→即反映</p>
+          </div>
+        </div>
+
+        <div class="step-arrow" aria-hidden="true"><i class="fas fa-arrow-down"></i></div>
+
+        <div class="usage-step">
+          <div class="usage-step-header">
+            <span class="usage-step-badge">STEP 3</span>
+            <h3>📋 コピーして投稿</h3>
+          </div>
+          <div class="usage-step-content">
+            <div class="usage-mockup">
+              <div class="mockup-screen"><i class="fas fa-copy" aria-hidden="true"></i><p>ワンクリックでコピー</p></div>
+            </div>
+            <p class="usage-description">あとは各SNSに貼るだけ!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: ターゲット別訴求 -->
+  <section class="target-audience">
+    <div class="container">
+      <h2 class="section-title">こんな方に選ばれています</h2>
+
+      <div class="audience-grid">
+        <div class="audience-card">
+          <div class="audience-header"><div class="audience-icon">🏛️</div><h3>地方議員・首長の方へ</h3></div>
+          <div class="audience-benefits">
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>議会報告書のURLから自動で投稿文</p></div>
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>イベント写真を撮ったらすぐ投稿</p></div>
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>活動報告が「伝わる文章」に変換</p></div>
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>堅苦しくない、親しみやすい文章に</p></div>
+          </div>
+          <div class="audience-testimonial">
+            <p class="testimonial-text">「視察報告をSNSで伝えるのに、いつも30分かかっていたのが、写真アップで2分で完成。有権者との距離が近くなった気がする」</p>
+            <p class="testimonial-author">都内某区議・40代</p>
+          </div>
+        </div>
+
+        <div class="audience-card">
+          <div class="audience-header"><div class="audience-icon">🌱</div><h3>SNS初心者の方へ</h3></div>
+          <div class="audience-benefits">
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>プロンプト? 何それ?でもOK</p></div>
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>「何を書けばいいか」をAIが提案</p></div>
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>ハッシュタグも自動生成</p></div>
+            <div class="benefit"><i class="fas fa-check" aria-hidden="true"></i><p>投稿のネタ切れから解放</p></div>
+          </div>
+          <div class="audience-testimonial">
+            <p class="testimonial-text">「SNSが苦痛だったのに、このツールのおかげで投稿が楽しみに。文章を考えるストレスがゼロになった」</p>
+            <p class="testimonial-author">会社員・30代</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-container">
+        <a href="#trial" class="btn btn-primary btn-large">無料トライアルを始める</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: 機能詳細 -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">充実の機能で、あなたのSNS発信を支援</h2>
+
+      <div class="features-highlights">
+        <div class="feature-highlight"><i class="fas fa-mobile-alt" aria-hidden="true"></i><h3>3SNS同時生成</h3></div>
+        <div class="feature-highlight"><i class="fas fa-video" aria-hidden="true"></i><h3>動画対応</h3></div>
+        <div class="feature-highlight"><i class="fas fa-comments" aria-hidden="true"></i><h3>Chat編集</h3></div>
+      </div>
+
+      <!-- ※ここ（各カード上部のアイコン）だけ、添付スクショの構成に合わせて調整 -->
+      <div class="features-grid">
+        <!-- 1: SNS対応（Instagram / Facebook / X） -->
+        <div class="feature-item">
+          <div class="feature-icon" aria-hidden="true">
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-facebook"></i>
+            <span class="x-inline">
+              <svg viewBox="0 0 24 24" role="img" aria-label="X" focusable="false">
+                <path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-7.1L5.9 22H2.8l7.3-8.4L0.9 2h6.4l4.4 6.4L18.9 2zm-1.1 18h1.7L6.1 4H4.2l13.6 16z"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Instagram・Facebook・X対応</h3>
+          <p>それぞれのSNSに最適化された文章を同時生成</p>
+        </div>
+
+        <!-- 2: URLから自動生成（リンク） -->
+        <div class="feature-item">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-link"></i></div>
+          <h3>URLからも自動生成</h3>
+          <p>議会報告書や活動ブログのURLを貼るだけで、要約+投稿文を作成</p>
+        </div>
+
+        <!-- 3: 動画から文章生成（フィルム） -->
+        <div class="feature-item">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-film"></i></div>
+          <h3>動画からも文章生成</h3>
+          <p>スマホで撮った動画をアップするだけ（Proプラン）</p>
+        </div>
+
+        <!-- 4: チャットでトーン調整（吹き出し） -->
+        <div class="feature-item">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-comment-dots"></i></div>
+          <h3>チャットでトーン調整</h3>
+          <p>「もっとカジュアルに」「敬語で丁寧に」など、自由自在に文章を調整可能</p>
+        </div>
+
+        <!-- 5: ハッシュタグ提案（#） -->
+        <div class="feature-item">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-hashtag"></i></div>
+          <h3>ハッシュタグ候補も自動提案</h3>
+          <p>投稿のリーチを広げるタグをAIが提案</p>
+        </div>
+
+        <!-- 6: ITが苦手でも安心（手） -->
+        <div class="feature-item">
+          <div class="feature-icon" aria-hidden="true"><i class="fas fa-handshake"></i></div>
+          <h3>ITが苦手でも安心</h3>
+          <p>導入時にオンラインで画面共有しながら丁寧にレクチャー</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: 導入実績・ユーザーの声 -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-title">導入実績 & ユーザーの声</h2>
+
+      <div class="stats">
+        <div class="stat-item"><i class="fas fa-users" aria-hidden="true"></i><p>地方議員、都議を含む<br />政治家が活用中</p></div>
+        <div class="stat-item"><i class="fas fa-clock" aria-hidden="true"></i><p>投稿作成時間<br /><strong>平均10分短縮</strong></p></div>
+        <div class="stat-item"><i class="fas fa-briefcase" aria-hidden="true"></i><p>一般会社員、団体代表など<br />幅広く利用</p></div>
+      </div>
+
+      <h3 class="testimonials-subtitle">💬 先行ユーザーの声</h3>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="testimonial-quote">"今日より良い投稿ができる気がする。明日がちょっと楽しみになった!"</p><p class="testimonial-author">地方議員・50代</p></div>
+        <div class="testimonial-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="testimonial-quote">"時間に追われていた私を救ってくれた。本当にありがとう…!"</p><p class="testimonial-author">会社員・30代</p></div>
+        <div class="testimonial-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="testimonial-quote">"未来の自分に近づける気がした。SNSがようやく味方になった。"</p><p class="testimonial-author">地域団体代表・40代</p></div>
+        <div class="testimonial-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="testimonial-quote">"作業がサクサク進んで、久しぶりに心に余裕が戻ってきた。"</p><p class="testimonial-author">個人事業主・50代</p></div>
+        <div class="testimonial-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p class="testimonial-quote">"文章作成にカロリーを使わなくても済むようになった。他のことに集中できる!"</p><p class="testimonial-author">会社員・40代</p></div>
+      </div>
+
+      <div class="cta-container"><a href="#trial" class="btn btn-primary btn-large">私も無料で試してみる</a></div>
+    </div>
+  </section>
+
+  <!-- Section 8: 料金プラン -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <h2 class="section-title">料金プラン</h2>
+      <p class="section-subtitle">まずは7日間無料でお試しください</p>
+      <p class="pricing-lead">すでに多くのユーザーが <strong>投稿作成時間を大幅削減</strong>。まずは操作感だけでも体験できます。</p>
+
+      <div class="campaign-banner" role="note" aria-label="キャンペーン実施中">
+        <div class="campaign-glow" aria-hidden="true"></div>
+        <div class="campaign-ribbon" aria-hidden="true"><i class="fas fa-bolt"></i><span>今だけ</span></div>
+
+        <div class="campaign-title">
+          <i class="fas fa-gift" aria-hidden="true"></i>
+          <span>キャンペーン実施中</span>
+          <span aria-hidden="true">🎉</span>
+        </div>
+
+        <p class="campaign-copy">
+          <strong>1アカウントあたりの初期費用</strong>が今だけ割引。<br />
+          初期設定費: <span class="strike">50,000円</span> → <span class="highlight">30,000円</span><span style="font-weight:900;">（税抜）</span>
+        </p>
+        <p class="campaign-sub">※ 予告なく終了する場合があります。気になる方は先に無料トライアルで操作感だけでもお試しください。</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3>Starter Path</h3>
+            <div class="price"><span class="price-amount">5,000</span><span class="price-currency">円/月</span></div>
+            <p class="price-note">（税抜）通常 6,500円</p>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check" aria-hidden="true"></i> URLから要約・投稿文生成</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 画像から投稿文生成</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 3SNS同時対応</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> ハッシュタグ自動提案</li>
+          </ul>
+          <p class="pricing-note">※7ヶ月以降解約可能</p>
+          <a href="#trial" class="btn btn-outline">選択する</a>
+        </div>
+
+        <div class="pricing-card pricing-recommended">
+          <div class="recommended-badge">おすすめ!</div>
+          <div class="pricing-header">
+            <h3>Pro Path</h3>
+            <div class="price"><span class="price-amount">6,000</span><span class="price-currency">円/月</span></div>
+            <p class="price-note">（税抜）通常 7,800円</p>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check" aria-hidden="true"></i> Starterプランの全機能</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> <strong>動画からも文章生成可能 🎬</strong></li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 3SNS同時対応</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 優先サポート</li>
+          </ul>
+          <p class="pricing-note">※7ヶ月以降解約可能</p>
+          <a href="#trial" class="btn btn-primary">選択する</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3>Group Path</h3>
+            <div class="price"><span class="price-amount">19,800</span><span class="price-currency">円/月</span></div>
+            <p class="price-note">（税抜）通常 25,800円</p>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check" aria-hidden="true"></i> 5人分セットプラン</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 5ID一括管理</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 全機能利用可能</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 専属サポート</li>
+          </ul>
+          <p class="pricing-note">※7ヶ月以降解約可能</p>
+          <a href="#trial" class="btn btn-outline">選択する</a>
+        </div>
+      </div>
+
+      <div class="trial-info">
+        <h3>💳 7日間無料トライアル</h3>
+        <div class="trial-features">
+          <div class="trial-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>クレジットカード登録不要</p></div>
+          <div class="trial-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>全機能お試し可能</p></div>
+          <div class="trial-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>期間中いつでもキャンセルOK</p></div>
+        </div>
+      </div>
+
+      <div class="cta-container"><a href="#trial" class="btn btn-primary btn-large">7日間無料で始める</a></div>
+    </div>
+  </section>
+
+  <!-- Section 9: FAQ -->
+  <section class="faq">
+    <div class="container">
+      <h2 class="section-title">よくあるご質問</h2>
+
+      <div class="faq-list" role="list">
+        <div class="faq-item" role="listitem">
+          <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+            <h3>Q. ITが苦手でも使えますか?</h3>
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </div>
+          <div class="faq-answer"><p>はい!基本操作は「アップ」「コピペ」の2つだけです。導入時にオンラインで丁寧にご説明しますのでご安心ください。</p></div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+            <h3>Q. ChatGPTを直接使うのと何が違う?</h3>
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </div>
+          <div class="faq-answer"><p>タッチ数が圧倒的に少なく、SNS投稿に特化している点が違います。プロンプトを毎回考える必要がなく、迷わず同じ操作で使えます。さらに3つのSNS用に最適化された文章が同時生成されます。</p></div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+            <h3>Q. 地方議員以外でも利用できる?</h3>
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </div>
+          <div class="faq-answer"><p>もちろんです!中小企業経営者、個人事業主、PTA・地域団体など、「発信したいが文章作成に時間をかけられない」方全てにご利用いただけます。</p></div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+            <h3>Q. 無料トライアル後、自動課金される?</h3>
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </div>
+          <div class="faq-answer"><p>いいえ。トライアル期間中に自動で課金されることはありません。継続する場合のみ、正式契約となります。</p></div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+            <h3>Q. 契約前にデモを見られる?</h3>
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </div>
+          <div class="faq-answer"><p>はい!オンラインでのデモや説明を承っています。下のフォームからお気軽にご予約ください。</p></div>
+        </div>
+      </div>
+
+      <div class="cta-container">
+        <a href="#contact" class="btn btn-outline btn-large"><i class="fas fa-comments" aria-hidden="true"></i> デモ・導入相談を予約する</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 10: 最終CTA + 申込導線（簡易フォーム） -->
+  <section class="final-cta" id="trial">
+    <div class="container">
+      <h2 class="final-cta-title">さあ、SNS投稿のストレスから解放されよう</h2>
+      <p class="final-cta-subtitle">今すぐ7日間無料トライアル</p>
+
+      <div class="final-cta-features">
+        <div class="final-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>クレジットカード登録不要</p></div>
+        <div class="final-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>3つのSNSに対応</p></div>
+        <div class="final-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>画像・動画・URLから自動生成</p></div>
+        <div class="final-feature"><i class="fas fa-check-circle" aria-hidden="true"></i><p>ITが苦手でも安心サポート</p></div>
+      </div>
+
+      <div class="cta-trust" aria-label="安心して始められる理由">
+        <div class="trust-item">
+          <i class="fas fa-bolt" aria-hidden="true"></i>
+          <p>登録30秒</p>
+          <small>面倒な設定なし</small>
+        </div>
+        <div class="trust-item">
+          <i class="fas fa-credit-card" aria-hidden="true"></i>
+          <p>クレカ不要</p>
+          <small>まずは無料体験</small>
+        </div>
+        <div class="trust-item">
+          <i class="fas fa-unlock" aria-hidden="true"></i>
+          <p>いつでも停止OK</p>
+          <small>リスクなしで試せます</small>
+        </div>
+      </div>
+
+      <div class="final-cta-buttons">
+        <!-- Strikinglyの既存導線 -->
+        <a href="https://autopoststudio.mystrikingly.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-xlarge">
+          <i class="fas fa-camera" aria-hidden="true"></i> 無料で投稿作成を体験する
+          <span class="btn-sub">（登録30秒・クレカ不要）</span>
+        </a>
+        <p class="or-text">または</p>
+        <a href="#contact" class="btn btn-outline btn-large"><i class="fas fa-comments" aria-hidden="true"></i> デモ・相談を予約する</a>
+      </div>
+  </section>
+
+  <!-- フッター -->
+  <footer class="footer" id="contact" aria-label="フッター">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo"><i class="fas fa-paper-plane" aria-hidden="true"></i><span>AutoPost Studio</span></div>
+        <div class="footer-links">
+          <!-- TODO: 実URLに差し替え -->
+          <a href="#contact">お問い合わせ</a>
+          <a href="terms.html">利用規約</a>
+          <a href="#" onclick="alert('TODO: プライバシーポリシーは別ページに差し替えてください'); return false;">プライバシーポリシー</a>
+          <a href="#" onclick="alert('TODO: 運営会社情報は別ページに差し替えてください'); return false;">運営会社</a>
+        </div>
+        <div class="footer-social" aria-label="SNSリンク">
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+          <a href="#" aria-label="X">
+            <span class="x-inline" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-label="X" focusable="false">
+                <path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-7.1L5.9 22H2.8l7.3-8.4L0.9 2h6.4l4.4 6.4L18.9 2zm-1.1 18h1.7L6.1 4H4.2l13.6 16z"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-copyright"><p>&copy; 2024 AutoPost Studio. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script>
+    // ==========================================
+    // NOTE: 「Failed to execute 'write' on 'Document': Invalid or unexpected token」対策
+    // - 外部JSから document.write('...') でこのHTMLを流し込むケースで、テンプレリテラル（`...`）が混入すると
+    //   文字列のクオートが壊れて SyntaxError になることがあります。
+    // - このファイルは template literal（バッククォート）を使わない実装に統一しています。
+    // ==========================================
+
+    // ==========================================
+    // Mini self-checks（テスト相当）
+    // - LPを単体HTMLで配布した時に壊れていないかを検出
+    // ==========================================
+    function runSelfChecks() {
+      var required = [
+        ['.header', 'header'],
+        ['#hero-screens', 'hero screens'],
+        ['.hero-mockup', 'hero mockup'],
+        ['.faq-item', 'faq items'],
+        ['#mockUploadBtn', 'mock upload button'],
+        ['#mockUploadInput', 'mock upload input']
+      ];
+
+      var missing = required.filter(function (pair) {
+        var sel = pair[0];
+        return !document.querySelector(sel);
+      });
+
+      if (missing.length) {
+        console.warn('[LP SelfCheck] Missing elements:', missing.map(function (m) { return m[1] + ' (' + m[0] + ')'; }));
+      } else {
+        console.log('[LP SelfCheck] OK');
+      }
+
+      // 追加テスト: hero-screens のカード枚数
+      var wrap = document.querySelector('#hero-screens');
+      if (wrap) {
+        var cards = wrap.querySelectorAll('.mockup-screen-card');
+        if (!cards || cards.length < 2) {
+          console.warn('[LP SelfCheck] hero mock screens should be >= 2');
+        }
+      }
+    }
+
+    // ==========================================
+    // スムーズスクロール
+    // ==========================================
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        var target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+
+        var headerOffset = 80;
+        var elementPosition = target.getBoundingClientRect().top;
+        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      });
+    });
+
+    // ==========================================
+    // ヘッダーのスクロール時背景変更
+    // ==========================================
+    var header = document.querySelector('.header');
+    window.addEventListener('scroll', function () {
+      var currentScroll = window.pageYOffset;
+      if (!header) return;
+      if (currentScroll > 50) {
+        header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+      } else {
+        header.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+      }
+    });
+
+    // ==========================================
+    // FAQアコーディオン（クリック + Enter/Space）
+    // ==========================================
+    function toggleFaq(item) {
+      document.querySelectorAll('.faq-item').forEach(function (otherItem) {
+        if (otherItem !== item) {
+          otherItem.classList.remove('active');
+          var q = otherItem.querySelector('.faq-question');
+          if (q) q.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      item.classList.toggle('active');
+      var question = item.querySelector('.faq-question');
+      if (question) question.setAttribute('aria-expanded', item.classList.contains('active') ? 'true' : 'false');
+    }
+
+    document.querySelectorAll('.faq-item').forEach(function (item) {
+      var question = item.querySelector('.faq-question');
+      if (!question) return;
+
+      question.addEventListener('click', function () { toggleFaq(item); });
+      question.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleFaq(item);
+        }
+      });
+    });
+
+    // ==========================================
+    // スクロールアニメーション（フェードイン）
+    // ==========================================
+    var observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.addEventListener('DOMContentLoaded', function () {
+      runSelfChecks();
+
+      var animatedElements = document.querySelectorAll(
+        '.problem-card, .comparison-card, .usage-step, .audience-card, .feature-item, .testimonial-card, .pricing-card, .faq-item, .form-card'
+      );
+
+      animatedElements.forEach(function (el) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        observer.observe(el);
+      });
+
+      initHeroDraggable();
+    });
+
+    // ==========================================
+    // スクロールインジケーターのフェード
+    // ==========================================
+    var scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+      window.addEventListener('scroll', function () {
+        scrollIndicator.style.opacity = window.pageYOffset > 100 ? '0' : '1';
+      });
+    }
+
+    // ==========================================
+    // CTAボタンのクリックアニメーション
+    // ==========================================
+    document.querySelectorAll('.btn-primary, .btn-outline').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.style.transform = 'scale(0.97)';
+        setTimeout(function () { btn.style.transform = ''; }, 150);
+      });
+    });
+
+    // ==========================================
+    // 料金プランカードのハイライト
+    // ==========================================
+    document.querySelectorAll('.pricing-card').forEach(function (card) {
+      card.addEventListener('mouseenter', function () {
+        card.style.transform = 'translateY(-10px) scale(1.02)';
+      });
+
+      card.addEventListener('mouseleave', function () {
+        if (card.classList.contains('pricing-recommended')) {
+          card.style.transform = 'scale(1.05)';
+        } else {
+          card.style.transform = '';
+        }
+      });
+    });
+
+    // ==========================================
+    // STEP1 モック：ボタン→ファイル選択（実ドラッグ&ドロップはしない）
+    // ==========================================
+    var mockBtn = document.querySelector('#mockUploadBtn');
+    var mockInput = document.querySelector('#mockUploadInput');
+    var mockName = document.querySelector('#mockUploadName');
+
+    if (mockBtn && mockInput) {
+      mockBtn.addEventListener('click', function () { mockInput.click(); });
+      mockInput.addEventListener('change', function () {
+        var file = mockInput.files && mockInput.files[0];
+        if (!mockName) return;
+        mockName.textContent = file ? ('選択中: ' + file.name) : '';
+      });
+    }
+
+    // ==========================================
+    // Hero モック：画面を自動切替（Hot-mock風）
+    // ==========================================
+    var screensWrap = document.querySelector('#hero-screens');
+    if (screensWrap) {
+      var screens = Array.from(screensWrap.querySelectorAll('.mockup-screen-card'));
+      var idx = 0;
+      if (screens.length >= 2) {
+        setInterval(function () {
+          screens[idx].classList.remove('is-active');
+          idx = (idx + 1) % screens.length;
+          screens[idx].classList.add('is-active');
+        }, 2800);
+      }
+    }
+
+    // ==========================================
+    // Hero モック：スマホを「ホットモックっぽく」軽くドラッグで動かす
+    // - 仕様が曖昧なので確認: ドラッグは「左右上下に少し動く + 少し回転」だけでOK?
+    // ==========================================
+    function initHeroDraggable() {
+      var el = document.querySelector('#heroMock');
+      if (!el) return;
+
+      var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduce) return;
+
+      var startX = 0;
+      var startY = 0;
+      var currentX = 0;
+      var currentY = 0;
+      var dragging = false;
+      var pointerId = null;
+
+      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+      function applyTransform(dx, dy) {
+        // 最大移動量
+        var maxMove = 22;
+        var x = clamp(dx, -maxMove, maxMove);
+        var y = clamp(dy, -maxMove, maxMove);
+
+        // 軽い傾き
+        var maxRot = 6;
+        var rotY = clamp(x / maxMove * maxRot, -maxRot, maxRot);
+        var rotX = clamp(-y / maxMove * maxRot, -maxRot, maxRot);
+
+        el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+      }
+
+      function reset() {
+        el.style.transition = 'transform 260ms ease';
+        el.style.transform = '';
+        setTimeout(function () {
+          el.style.transition = '';
+        }, 280);
+      }
+
+      el.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        pointerId = e.pointerId;
+        el.setPointerCapture(pointerId);
+        el.classList.add('is-dragging');
+
+        startX = e.clientX;
+        startY = e.clientY;
+        currentX = 0;
+        currentY = 0;
+      });
+
+      el.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+        applyTransform(currentX, currentY);
+      });
+
+      function endDrag(e) {
+        if (!dragging) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+        dragging = false;
+        pointerId = null;
+        el.classList.remove('is-dragging');
+        reset();
+      }
+
+      el.addEventListener('pointerup', endDrag);
+      el.addEventListener('pointercancel', endDrag);
+      el.addEventListener('mouseleave', function () {
+        if (!dragging) return;
+        dragging = false;
+        pointerId = null;
+        el.classList.remove('is-dragging');
+        reset();
+      });
+    }
+
+    // ==========================================
+    // リロード時にトップへ
+    // ==========================================
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('beforeunload', function () { window.scrollTo(0, 0); });
+  </script>
+</body>
+</html>
