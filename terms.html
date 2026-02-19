@@ -1,273 +1,228 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#FF6B35" />
-  <meta name="description" content="AutoPost Studio（SNS投稿生成アプリ）利用規約" />
-  <title>利用規約 | AutoPost Studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>利用規約 | AutoPost Studio</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root{
-      --primary:#FF6B35;
-      --gray-50:#F9FAFB;
-      --gray-100:#F3F4F6;
-      --gray-200:#E5E7EB;
-      --gray-600:#4B5563;
-      --gray-700:#374151;
-      --gray-800:#1F2937;
-      --gray-900:#111827;
-      --shadow: 0 10px 25px rgba(17,24,39,0.10);
-      --radius: 18px;
-      --font: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body{
-      font-family: var(--font);
-      color: var(--gray-800);
-      line-height: 1.85;
-      background: linear-gradient(135deg, #FFF7ED, #FFFBEB);
-      min-height: 100vh;
-    }
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 28px 16px 48px;
-    }
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(17,24,39,0.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 12px;
-      z-index: 10;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      font-weight: 900;
-      color: var(--primary);
-      text-decoration:none;
-      white-space: nowrap;
-    }
-    .brand i{ font-size: 18px; }
-    .actions{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content:flex-end;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 800;
-      text-decoration:none;
-      border: 2px solid transparent;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .btn-primary{
-      background: linear-gradient(135deg, var(--primary), #FF8C5A);
-      color: white;
-      box-shadow: 0 10px 20px rgba(255,107,53,0.22);
-    }
-    .btn-ghost{
-      background: white;
-      border-color: rgba(17,24,39,0.10);
-      color: var(--gray-800);
-    }
-    .card{
-      margin-top: 18px;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid rgba(17,24,39,0.08);
-      border-radius: calc(var(--radius) + 6px);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .card-head{
-      padding: 22px 22px 10px;
-      border-bottom: 1px solid rgba(17,24,39,0.06);
-      background: radial-gradient(circle at 20% 20%, rgba(255,107,53,0.12), transparent 40%);
-    }
-    h1{
-      font-size: 1.6rem;
-      line-height: 1.35;
-      color: var(--gray-900);
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-    .sub{
-      color: var(--gray-600);
-      font-weight: 700;
-      font-size: 0.98rem;
-    }
-    .content{
-      padding: 22px;
-    }
-    h2{
-      font-size: 1.15rem;
-      color: var(--gray-900);
-      margin-top: 20px;
-      margin-bottom: 8px;
-      font-weight: 900;
-    }
-    p, li{
-      color: var(--gray-700);
-      font-weight: 500;
-      font-size: 1.0rem;
-    }
-    ul{ padding-left: 1.25rem; margin: 8px 0 4px; }
-    .note{
-      margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: var(--gray-50);
-      border: 1px solid rgba(17,24,39,0.08);
-      color: var(--gray-700);
-      font-weight: 700;
-    }
-    .footer{
-      margin-top: 16px;
-      text-align:center;
-      color: var(--gray-600);
-      font-size: 0.92rem;
-      font-weight: 700;
-    }
-    @media (max-width: 520px){
-      .actions{ gap: 8px; }
-      .btn{ padding: 10px 12px; }
-      h1{ font-size: 1.35rem; }
-      .content{ padding: 18px; }
-    }
-  </style>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:#ffffff;
+  color:#1F2937;
+  line-height:1.9;
+}
+
+/* ===== ヘッダー ===== */
+.header{
+  position:sticky;
+  top:0;
+  background:#ffffff;
+  border-bottom:1px solid #E5E7EB;
+  padding:16px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:100;
+}
+
+.logo{
+  font-weight:900;
+  color:#FF6B35;
+  text-decoration:none;
+  font-size:20px;
+}
+
+.home-btn{
+  text-decoration:none;
+  background:#FF6B35;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:999px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.home-btn:hover{
+  opacity:.85;
+}
+
+/* ===== コンテンツ ===== */
+.container{
+  max-width:900px;
+  margin:40px auto;
+  padding:0 20px;
+}
+
+.card{
+  background:#ffffff;
+  border:1px solid #E5E7EB;
+  border-radius:14px;
+  padding:32px;
+}
+
+h1{
+  font-size:26px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+h2{
+  margin-top:28px;
+  margin-bottom:8px;
+  font-size:18px;
+  font-weight:900;
+}
+
+p{
+  margin-bottom:14px;
+}
+
+ul{
+  padding-left:20px;
+  margin-bottom:14px;
+}
+
+li{
+  margin-bottom:6px;
+}
+
+.note{
+  background:#F9FAFB;
+  border:1px solid #E5E7EB;
+  padding:14px;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.footer{
+  text-align:center;
+  margin-top:30px;
+  color:#6B7280;
+  font-size:14px;
+}
+
+@media(max-width:600px){
+  .card{
+    padding:22px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="topbar" role="navigation" aria-label="利用規約 ナビゲーション">
-      <a class="brand" href="index.html#top" aria-label="Homeに戻る">
-        <i class="fas fa-paper-plane" aria-hidden="true"></i>
-        <span>AutoPost Studio</span>
-      </a>
 
-      <div class="actions">
-        <a class="btn btn-ghost" href="index.html#top">
-          <i class="fas fa-home" aria-hidden="true"></i> Home
-        </a>
-        <a class="btn btn-primary" href="index.html#trial">
-          <i class="fas fa-bolt" aria-hidden="true"></i> 無料トライアル
-        </a>
-      </div>
-    </div>
+<header class="header">
+  <a href="index.html#top" class="logo">
+    <i class="fas fa-paper-plane"></i> AutoPost Studio
+  </a>
 
-    <section class="card" aria-label="利用規約">
-      <div class="card-head">
-        <h1>Auto post Studio（SNS投稿生成アプリ） 利用規約</h1>
-        <p class="sub">本利用規約（以下、「本規約」といいます。）は、当社が提供するSNS投稿生成アプリケーション（以下、「本サービス」といいます。）の利用条件を定めるものです。</p>
-      </div>
+  <a href="index.html#top" class="home-btn">
+    <i class="fas fa-home"></i> Home
+  </a>
+</header>
 
-      <div class="content">
-        <p>ユーザーは、本サービスの利用にあたり、本規約の全文を読み、その内容に同意したものとみなします。</p>
+<div class="container">
+<div class="card">
 
-        <h2>第1条（適用）</h2>
-        <ul>
-          <li>本規約は、ユーザーが本サービスを利用する一切の行為に適用されるものとします。</li>
-          <li>当社は、必要に応じて本規約を変更することができるものとし、変更後の規約は当社が別途定める場合を除き、当社ウェブサイトに掲示した時点で効力を生じるものとします。</li>
-        </ul>
+<h1>Auto post Studio（SNS投稿生成アプリ） 利用規約</h1>
 
-        <h2>第2条（本サービスの内容）</h2>
-        <ul>
-          <li>本サービスは、SNS投稿の文章生成・要約・画像説明文生成などを行うSaaS型のWebサービスです。</li>
-          <li>本サービスは外部API（OpenAI等）を利用して提供される機能を含みます。</li>
-          <li>本サービスの仕様は、当社の判断により変更・追加・廃止される場合があります。</li>
-        </ul>
+<p>
+本利用規約（以下、「本規約」といいます。）は、当社が提供するSNS投稿生成アプリケーション
+（以下、「本サービス」といいます。）の利用条件を定めるものです。
+</p>
 
-        <h2>第3条（アカウント登録および認証情報）</h2>
-        <ul>
-          <li>ユーザーは、本サービスの利用にあたり、メールアドレス・パスワード等の登録情報を正確に入力するものとします。</li>
-          <li>登録情報に虚偽があった場合、当社は利用停止・契約解除を行うことができるものとします。</li>
-          <li>アカウント情報の管理はユーザー自身が行うものとし、不正利用等に関して当社は一切責任を負いません。</li>
-        </ul>
+<p>
+ユーザーは、本サービスの利用にあたり、本規約の全文を読み、その内容に同意したものとみなします。
+</p>
 
-        <h2>第4条（利用料金および支払い方法）</h2>
-        <ul>
-          <li>本サービスの利用料金は、当社が定める料金プランに従うものとします。</li>
-          <li>支払いは、ユーザー本人名義のクレジットカードによる決済のみとします。</li>
-          <li>決済後の料金について、いかなる理由があっても返金はできません。</li>
-          <li>キャンペーン適用時には、初期費用や無料期間などが変更される場合があります。</li>
-          <li>ユーザーが契約期間中に途中解約を希望する場合、以下の条件を適用します。</li>
-        </ul>
-        <p class="note">
-          ・契約開始から7か月以降に限り解約可能とします。<br>
-          ・最低利用期間中（契約開始から6カ月以内）に解約された場合、「6ヶ月分の利用料金」から既に支払われた金額の差額を一括で請求します。<br>
-          ただし、当社の重大な過失によるサービス停止や不備が認められる場合、この限りではありません。
-        </p>
+<h2>第1条（適用）</h2>
+<ul>
+<li>本規約は、ユーザーが本サービスを利用する一切の行為に適用されるものとします。</li>
+<li>当社は必要に応じて本規約を変更でき、掲載時点で効力を生じます。</li>
+</ul>
 
-        <h2>第5条（API利用・上限・一時停止）</h2>
-        <ul>
-          <li>本サービスは外部API（例：OpenAI API）を利用しており、ユーザーの使用量に応じて当社側にコストが発生します。</li>
-          <li>ユーザーが通常の想定利用を大きく超えるAPIリクエストを行い、当社の負担が過大となる場合は、事前通知の有無を問わず、アカウントを一時停止または制限することがあります。</li>
-          <li>ユーザーは、サービスの趣旨に沿った用途に限定して利用するものとし、不適切な大量利用・自動化・BOT的利用など、通常利用から逸脱した行為が確認された場合、停止の対象となるものとします。</li>
-        </ul>
+<h2>第2条（本サービスの内容）</h2>
+<ul>
+<li>SNS投稿の文章生成・要約・説明文生成を行うSaaSサービスです。</li>
+<li>外部API（OpenAI等）を利用します。</li>
+<li>仕様は予告なく変更される場合があります。</li>
+</ul>
 
-        <h2>第6条（禁止事項）</h2>
-        <ul>
-          <li>本サービスを、提供目的から逸脱した方法で利用する行為</li>
-          <li>外部API利用量の不正拡大、意図的な大量リクエスト送信</li>
-          <li>逆コンパイル、解析、複製などの不正行為</li>
-          <li>他者のアカウントへの不正アクセス</li>
-          <li>法令または公序良俗に違反する行為</li>
-          <li>当社が不適切と判断する行為</li>
-        </ul>
+<h2>第3条（アカウント登録）</h2>
+<ul>
+<li>登録情報は正確に入力してください。</li>
+<li>虚偽情報が確認された場合、利用停止となる場合があります。</li>
+<li>アカウント管理はユーザー責任とします。</li>
+</ul>
 
-        <h2>第7条（サービス提供の中断・停止）</h2>
-        <ul>
-          <li>当社は、システム保守・更新、外部APIの障害、通信回線の障害等により、ユーザーへの事前通知なく本サービスの提供を一時的に中断することがあります。</li>
-          <li>外部システム側の障害（OpenAI・Supabase等）の発生により本サービスが利用不能となった場合、返金は原則行いません。</li>
-        </ul>
+<h2>第4条（料金・支払い）</h2>
+<ul>
+<li>料金は当社が定めるプランに従います。</li>
+<li>支払いは本人名義クレジットカードのみ。</li>
+<li>決済後の返金は行いません。</li>
+<li>キャンペーンにより初期費用等が変更される場合があります。</li>
+</ul>
 
-        <h2>第8条（免責事項）</h2>
-        <ul>
-          <li>本サービスの利用によりユーザーに生じた損害について、当社は一切の責任を負いません。</li>
-          <li>ユーザーが生成した文章・画像説明・投稿内容等によるトラブルについて、当社は責任を負いません。</li>
-          <li>当社の故意または重大な過失による場合を除き、当社の責任は本サービスの月額料金1ヶ月分を上限とします。</li>
-        </ul>
+<div class="note">
+契約開始から7か月以降に解約可能。<br>
+6か月以内の解約は6ヶ月分との差額を請求します。
+</div>
 
-        <h2>第9条（契約解除）</h2>
-        <ul>
-          <li>ユーザーが本規約に違反した場合、当社は事前通知なくアカウントを停止・削除することができます。</li>
-          <li>最低利用期間（6カ月）内での解除は、第4条のとおり追加清算の対象になります。</li>
-        </ul>
+<h2>第5条（API利用制限）</h2>
+<ul>
+<li>過度な利用が確認された場合、制限または停止する場合があります。</li>
+<li>BOT的利用・大量自動化は禁止します。</li>
+</ul>
 
-        <h2>第10条（個人情報の取り扱い）</h2>
-        <p>当社は、ユーザーの個人情報を当社のプライバシーポリシーに従って適切に取り扱うものとします。</p>
+<h2>第6条（禁止事項）</h2>
+<ul>
+<li>目的外利用</li>
+<li>大量リクエスト送信</li>
+<li>解析・複製</li>
+<li>不正アクセス</li>
+<li>法令違反行為</li>
+</ul>
 
-        <h2>第11条（準拠法および管轄）</h2>
-        <p>本規約は日本法に準拠し、ユーザーと当社の間で発生した紛争については、当社所在地を管轄する裁判所を第一審の専属管轄裁判所とします。</p>
+<h2>第7条（サービス停止）</h2>
+<ul>
+<li>保守・障害時は予告なく停止する場合があります。</li>
+<li>外部サービス障害による返金は行いません。</li>
+</ul>
 
-        <div class="footer">
-          <p>&copy; 2024 AutoPost Studio</p>
-        </div>
-      </div>
-    </section>
-  </div>
+<h2>第8条（免責事項）</h2>
+<ul>
+<li>利用による損害について責任を負いません。</li>
+<li>生成内容によるトラブル責任は負いません。</li>
+<li>責任上限は月額1ヶ月分とします。</li>
+</ul>
+
+<h2>第9条（契約解除）</h2>
+<ul>
+<li>規約違反時、アカウント停止可能。</li>
+</ul>
+
+<h2>第10条（個人情報）</h2>
+<p>個人情報は適切に管理します。</p>
+
+<h2>第11条（準拠法）</h2>
+<p>日本法に準拠し、当社所在地の裁判所を管轄とします。</p>
+
+<div class="footer">
+© AutoPost Studio
+</div>
+
+</div>
+</div>
+
 </body>
 </html>
