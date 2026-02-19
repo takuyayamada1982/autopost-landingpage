@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>特定商取引法に基づく表示 | AutoPost Studio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --primary:#FF6B35;
+    --text:#1F2937;
+    --muted:#6B7280;
+    --border:#E5E7EB;
+    --bg:#FFFFFF;
+    --card:#FFFFFF;
+    --soft:#F9FAFB;
+    --shadow: 0 10px 25px rgba(17,24,39,0.08);
+    --radius: 14px;
+  }
+  body{
+    font-family:'Noto Sans JP', system-ui, -apple-system, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.9;
+  }
+  .header{
+    position:sticky; top:0;
+    background:rgba(255,255,255,0.98);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--border);
+    z-index:10;
+  }
+  .header-inner{
+    max-width:980px;
+    margin:0 auto;
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none;
+    color:var(--primary);
+    font-weight:900;
+    letter-spacing:0.02em;
+  }
+  .logo i{ font-size:18px; }
+  .nav{
+    display:flex; gap:10px; align-items:center;
+  }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:999px;
+    text-decoration:none;
+    font-weight:800;
+    border:2px solid transparent;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-home{
+    background:var(--primary);
+    color:#fff;
+  }
+  .btn-home:hover{ opacity:0.88; }
+  .btn-secondary{
+    background:#fff;
+    color:var(--primary);
+    border-color:var(--primary);
+  }
+  .btn-secondary:hover{
+    background:var(--primary);
+    color:#fff;
+  }
+
+  .wrap{
+    max-width:980px;
+    margin:28px auto 60px;
+    padding:0 18px;
+  }
+  .title{
+    display:flex; align-items:center; gap:10px;
+    font-size:26px;
+    font-weight:900;
+    margin-bottom:10px;
+  }
+  .lead{
+    color:var(--muted);
+    font-weight:700;
+    margin-bottom:18px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:26px;
+  }
+
+  .table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    overflow:hidden;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:#fff;
+  }
+  .table th, .table td{
+    padding:14px 14px;
+    vertical-align:top;
+    border-bottom:1px solid var(--border);
+  }
+  .table tr:last-child th,
+  .table tr:last-child td{ border-bottom:none; }
+  .table th{
+    width:32%;
+    background:var(--soft);
+    text-align:left;
+    font-weight:900;
+    color:#111827;
+  }
+  .table td{
+    font-weight:600;
+    color:var(--text);
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 10px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:12px;
+    background:rgba(255,107,53,0.10);
+    color:var(--primary);
+    border:1px solid rgba(255,107,53,0.22);
+    margin-left:8px;
+  }
+
+  .note{
+    margin-top:14px;
+    background:var(--soft);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px;
+    color:var(--text);
+    font-weight:700;
+  }
+  .note strong{ color:var(--primary); }
+
+  .footer{
+    margin-top:22px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+  }
+
+  @media (max-width:640px){
+    .table th{ width:40%; }
+    .title{ font-size:22px; }
+    .card{ padding:18px; }
+  }
+</style>
+</head>
+
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="index.html#top" aria-label="AutoPost Studio トップへ">
+      <i class="fas fa-paper-plane" aria-hidden="true"></i>
+      <span>AutoPost Studio</span>
+    </a>
+    <div class="nav">
+      <a class="btn btn-secondary" href="terms.html"><i class="fas fa-file-contract" aria-hidden="true"></i> 利用規約</a>
+      <a class="btn btn-home" href="index.html#top"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="title">
+    <i class="fas fa-store" aria-hidden="true" style="color:var(--primary)"></i>
+    特定商取引法に基づく表示
+    <span class="badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> 重要事項</span>
+  </h1>
+  <p class="lead">本ページは、特定商取引法に基づき、販売条件等を表示するものです。</p>
+
+  <section class="card">
+    <table class="table" aria-label="特定商取引法に基づく表示">
+      <tr>
+        <th>販売業者</th>
+        <td>山田通信コンサルティング合同会社</td>
+      </tr>
+      <tr>
+        <th>運営責任者</th>
+        <td>山田琢也</td>
+      </tr>
+      <tr>
+        <th>所在地</th>
+        <td>
+          〒107-0052<br>
+          東京都港区赤坂3-21-5　三銀ビル３F
+        </td>
+      </tr>
+      <tr>
+        <th>お問い合わせ先</th>
+        <td>
+          メールアドレス：info@tymean.com<br>
+          営業時間：平日10:00〜17:00（土日祝除く）<br>
+          電話番号はご請求いただければ遅延なく開示いたします。
+        </td>
+      </tr>
+      <tr>
+        <th>販売価格（役務の対価）</th>
+        <td>
+          本サービスの利用料金は、当社が定める料金プランページに記載された金額とします。<br>
+          料金は税込価格で表示しています。
+        </td>
+      </tr>
+      <tr>
+        <th>商品代金以外の必要料金</th>
+        <td>
+          ・インターネット通信費、通信環境の準備、通信回線利用料<br>
+          ・クレジットカード決済手数料（カード会社規定に準ずる）
+        </td>
+      </tr>
+      <tr>
+        <th>お支払い方法</th>
+        <td>
+          クレジットカード決済のみ（Stripe社の決済システムを利用しています）
+        </td>
+      </tr>
+      <tr>
+        <th>お支払時期</th>
+        <td>
+          ・初回：申込時に決済<br>
+          ・以降：毎月同日、または当社が指定する請求日に自動決済<br>
+          ※支払いサイクルはプランにより異なる場合があります。
+        </td>
+      </tr>
+      <tr>
+        <th>役務の提供時期（サービス提供時期）</th>
+        <td>
+          ユーザー登録完了後、即時サービス利用が可能です。<br>
+          キャンペーン適用時の無料期間がある場合は、その条件に従います。
+        </td>
+      </tr>
+      <tr>
+        <th>返品・キャンセルについて</th>
+        <td>
+          本サービスはデジタルコンテンツ・クラウドサービスであるため、購入後のキャンセル・返金には一切応じることができません。
+        </td>
+      </tr>
+      <tr>
+        <th>最低利用期間（契約期間）</th>
+        <td>
+          本サービスには最低利用期間を設定しています。契約開始日から6カ月間は最低利用期間となります。<br>
+          7カ月目以降に解約可能です。<br><br>
+          最低利用期間内に解約された場合は、<strong>「6カ月分の利用料金」から既に支払い済み分を差し引いた差額を一括請求</strong>します。<br>
+          弊社の重大な過失に基づく瑕疵がある場合、この限りではありません。
+        </td>
+      </tr>
+      <tr>
+        <th>サービス停止・制限について</th>
+        <td>
+          以下の場合、当社はユーザーの利用を制限または停止することがあります。<br>
+          ・API利用過多により異常な負荷が発生した場合<br>
+          ・通常の利用範囲を逸脱した過剰利用が認められる場合<br>
+          ・利用規約に違反する行為が確認された場合
+        </td>
+      </tr>
+      <tr>
+        <th>動作環境</th>
+        <td>
+          本サービスの動作には、当社が指定するブラウザや端末環境が必要です。<br>
+          推奨環境を満たさない場合の不具合については責任を負いません。
+        </td>
+      </tr>
+      <tr>
+        <th>外部サービス障害時の対応</th>
+        <td>
+          本サービスは外部API（例：OpenAI API等）や外部インフラを利用しています。<br>
+          外部サービスの障害に起因する本サービスの停止や不具合について、返金や補償は原則として行いません。
+        </td>
+      </tr>
+      <tr>
+        <th>表現および商品に関する注意書き</th>
+        <td>
+          AIにより生成される文章・説明文等の品質および成果について、その正確性・完全性・効果を保証するものではありません。<br>
+          SNS投稿結果（売上・フォロワー数増加・PV向上等）を保証するものでもありません。
+        </td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <strong>お願い：</strong>ページ下部フッターのリンク（利用規約・プライバシーポリシー）も合わせて設置すると、公開サイトとしての信頼性が一気に上がります。
+    </div>
+
+    <div class="footer">© AutoPost Studio</div>
+  </section>
+</main>
+
+</body>
+</html>
