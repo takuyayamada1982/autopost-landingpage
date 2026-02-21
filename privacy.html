@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AutoPost Studio（オートポストスタジオ）のプライバシーポリシー（個人情報保護方針）です。" />
+  <meta name="theme-color" content="#FF6B35" />
+  <title>プライバシーポリシー | AutoPost Studio</title>
+
+  <!-- Fonts / Icons（terms.html に合わせる） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+
+  <style>
+    /* ===== terms.html / LP と同系統のトーン ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root{
+      --primary-color: #FF6B35;
+      --instagram-start: #E1306C;
+      --instagram-end: #FD8D32;
+
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+
+      --font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 1rem;
+      --spacing-md: 1.5rem;
+      --spacing-lg: 2rem;
+      --spacing-xl: 3rem;
+      --spacing-2xl: 4rem;
+
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+
+      --transition-base: 300ms ease-in-out;
+    }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-family);
+      line-height: 1.8;
+      color: var(--gray-800);
+      background: #fff;
+      overflow-x: clip;
+    }
+    p, h1, h2, h3, h4, li, a { overflow-wrap: anywhere; word-break: normal; }
+
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+    }
+
+    /* ===== Header（LP/terms と揃える） ===== */
+    .header{
+      position: sticky;
+      top: 0;
+      left: 0; right: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+      z-index: 1000;
+    }
+    .header-content{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 0;
+      gap: 10px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap: var(--spacing-xs);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--primary-color);
+      text-decoration:none;
+      white-space: nowrap;
+    }
+    .logo i{ font-size: 1.5rem; }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 0.65rem 1.1rem;
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration:none;
+      border: 2px solid transparent;
+      cursor:pointer;
+      transition: var(--transition-base);
+      white-space: nowrap;
+      min-height: 44px;
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--primary-color), #FF8C5A);
+      color:#fff;
+      box-shadow: var(--shadow-md);
+    }
+    .btn-primary:hover{ transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn-outline{
+      background:#fff;
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    .btn-outline:hover{ background: var(--primary-color); color:#fff; }
+
+    /* ===== Hero（ページ見出し） ===== */
+    .hero{
+      background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 45%, #FFE4E6 100%);
+      padding: var(--spacing-xl) 0;
+      border-bottom: 1px solid rgba(17,24,39,0.08);
+    }
+    .hero-title{
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gray-900);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero-title .grad{
+      background: linear-gradient(135deg, var(--primary-color), var(--instagram-start));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero-sub{
+      color: var(--gray-600);
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    /* ===== Main Card ===== */
+    main{ padding: var(--spacing-xl) 0; }
+    .card{
+      background: #fff;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-md);
+      padding: var(--spacing-xl);
+    }
+
+    .toc{
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: 14px 16px;
+      margin: 0 0 var(--spacing-lg);
+    }
+    .toc-title{
+      font-weight: 900;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      display:flex; align-items:center; gap: 8px;
+    }
+    .toc ul{ padding-left: 1.2rem; }
+    .toc a{ color: var(--gray-700); text-decoration:none; font-weight: 800; }
+    .toc a:hover{ color: var(--primary-color); }
+
+    .section{
+      margin-top: var(--spacing-xl);
+    }
+    .section h2{
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--gray-900);
+      margin-bottom: 10px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .section h2 .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(255,107,53,0.14);
+      border: 1px solid rgba(255,107,53,0.28);
+      color: var(--primary-color);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .section p{ color: var(--gray-700); margin-bottom: 10px; }
+    .section ul{
+      margin: 10px 0 0;
+      padding-left: 1.25rem;
+      color: var(--gray-700);
+    }
+    .section li{ margin: 6px 0; }
+    .note{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(29,161,242,0.08);
+      border: 1px solid rgba(29,161,242,0.18);
+      color: var(--gray-800);
+      font-weight: 700;
+    }
+
+    .meta{
+      margin-top: var(--spacing-xl);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(17,24,39,0.10);
+      color: var(--gray-600);
+      font-weight: 700;
+    }
+
+    /* ===== Footer（LP と統一） ===== */
+    .footer{
+      background: var(--gray-900);
+      color:#fff;
+      padding: var(--spacing-2xl) 0 var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    .footer-content{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+    }
+    .footer-logo{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+    .footer-logo i{ color: var(--primary-color); font-size: 1.6rem; }
+    .footer-links{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .footer-links a{
+      color: var(--gray-300);
+      text-decoration:none;
+      font-weight: 800;
+    }
+    .footer-links a:hover{ color:#fff; }
+    .footer-copyright{
+      border-top: 1px solid rgba(255,255,255,0.10);
+      padding-top: var(--spacing-lg);
+      text-align:center;
+      color: var(--gray-400);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px){
+      .container{ padding-left: 16px; padding-right: 16px; }
+      .hero-title{ font-size: 1.6rem; }
+      .card{ padding: 18px; }
+      .logo span{ display:none; } /* LPと同様 */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header" aria-label="サイトヘッダー">
+    <div class="container">
+      <div class="header-content">
+        <a class="logo" href="index.html" aria-label="AutoPost Studio トップへ">
+          <i class="fas fa-paper-plane" aria-hidden="true"></i>
+          <span>AutoPost Studio</span>
+        </a>
+
+        <div style="display:flex; gap:10px; align-items:center;">
+          <a class="btn btn-outline" href="terms.html">
+            <i class="fas fa-file-signature" aria-hidden="true"></i> 利用規約
+          </a>
+          <a class="btn btn-primary" href="index.html#trial">
+            <i class="fas fa-bolt" aria-hidden="true"></i> 無料トライアル
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title"><span class="grad">プライバシーポリシー</span></h1>
+      <p class="hero-sub">
+        AutoPost Studio（以下「当サービス」）における、個人情報等の取り扱い方針を定めます。
+      </p>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main>
+    <div class="container">
+      <article class="card" aria-label="プライバシーポリシー本文">
+        <div class="toc" aria-label="目次">
+          <div class="toc-title"><i class="fas fa-list" aria-hidden="true"></i> 目次</div>
+          <ul>
+            <li><a href="#p1">1. 基本方針</a></li>
+            <li><a href="#p2">2. 取得する情報</a></li>
+            <li><a href="#p3">3. 利用目的</a></li>
+            <li><a href="#p4">4. 外部サービスの利用（委託・送信）</a></li>
+            <li><a href="#p5">5. 第三者提供</a></li>
+            <li><a href="#p6">6. Cookie等の利用</a></li>
+            <li><a href="#p7">7. 安全管理措置</a></li>
+            <li><a href="#p8">8. 開示・訂正・削除等</a></li>
+            <li><a href="#p9">9. プライバシーポリシーの変更</a></li>
+            <li><a href="#p10">10. お問い合わせ窓口</a></li>
+          </ul>
+        </div>
+
+        <section class="section" id="p1">
+          <h2><span class="badge">1</span> 基本方針</h2>
+          <p>
+            当サービスは、利用者の個人情報等を適切に取り扱うことを重要な責務と考え、
+            関連法令・ガイドラインを遵守し、適切な管理と保護に努めます。
+          </p>
+        </section>
+
+        <section class="section" id="p2">
+          <h2><span class="badge">2</span> 取得する情報</h2>
+          <p>当サービスは、提供に必要な範囲で以下の情報を取得することがあります。</p>
+          <ul>
+            <li><strong>アカウント情報</strong>：氏名（任意）、メールアドレス、ログイン情報 等</li>
+            <li><strong>入力・送信情報</strong>：投稿文生成のために入力されたテキスト、URL 等</li>
+            <li><strong>アップロード情報</strong>：画像・動画（投稿文生成に必要な範囲）</li>
+            <li><strong>決済関連情報</strong>：決済事業者が保持する決済情報に紐づく識別子（当サービス側ではカード番号等を保持しません）</li>
+            <li><strong>利用状況情報</strong>：アクセスログ、閲覧履歴、端末情報、ブラウザ情報、IPアドレス、Cookie等</li>
+            <li><strong>お問い合わせ情報</strong>：お問い合わせフォーム等で入力された内容</li>
+          </ul>
+          <div class="note">
+            ※ アップロードされたデータや入力内容は、機能提供（投稿文生成・改善・不正対策等）のために利用される場合があります。
+          </div>
+        </section>
+
+        <section class="section" id="p3">
+          <h2><span class="badge">3</span> 利用目的</h2>
+          <p>取得した情報は、主に以下の目的で利用します。</p>
+          <ul>
+            <li>当サービスの提供・維持・改善</li>
+            <li>本人確認、アカウント管理、認証、利用料金の請求</li>
+            <li>投稿文生成（AIを用いた処理を含む）および関連機能の提供</li>
+            <li>お問い合わせ対応、重要なお知らせの通知</li>
+            <li>不正利用の検知・防止、セキュリティの確保</li>
+            <li>利用状況の分析、品質改善、新機能検討</li>
+          </ul>
+        </section>
+
+        <section class="section" id="p4">
+          <h2><span class="badge">4</span> 外部サービスの利用（委託・送信）</h2>
+          <p>
+            当サービスは、機能提供・運用のために外部サービスを利用することがあります。
+            この場合、必要な範囲で情報が外部事業者へ送信・委託されることがあります。
+          </p>
+          <ul>
+            <li><strong>AI関連</strong>：投稿文生成等のため、AI提供事業者（例：OpenAI 等）を利用する場合があります。</li>
+            <li><strong>決済</strong>：決済のため、決済代行事業者（例：Stripe 等）を利用する場合があります。</li>
+            <li><strong>ホスティング/データ保管</strong>：Webホスティング、データベース等の運用基盤（例：Vercel / Supabase 等）を利用する場合があります。</li>
+            <li><strong>分析</strong>：利用状況の把握のため、アクセス解析等を利用する場合があります。</li>
+          </ul>
+          <div class="note">
+            ※ 外部サービスの利用にあたっては、必要な範囲に限定し、適切な安全管理のもとで行います。
+          </div>
+        </section>
+
+        <section class="section" id="p5">
+          <h2><span class="badge">5</span> 第三者提供</h2>
+          <p>
+            当サービスは、法令に基づく場合を除き、本人の同意なく個人情報を第三者に提供しません。
+            ただし、利用目的の達成に必要な範囲で業務委託先に取り扱いを委託する場合があります。
+          </p>
+        </section>
+
+        <section class="section" id="p6">
+          <h2><span class="badge">6</span> Cookie等の利用</h2>
+          <p>
+            当サービスは、利便性向上、ログイン状態の維持、利用状況の分析等のために、
+            Cookieや同等の技術を利用することがあります。
+          </p>
+          <p>
+            利用者はブラウザ設定によりCookieの受け取りを拒否できますが、
+            一部機能が正常に動作しない場合があります。
+          </p>
+        </section>
+
+        <section class="section" id="p7">
+          <h2><span class="badge">7</span> 安全管理措置</h2>
+          <p>
+            当サービスは、個人情報等の漏えい、滅失、改ざん等を防止するため、
+            アクセス制御、通信の暗号化（SSL/TLS）、権限管理等の合理的な安全管理措置を講じます。
+          </p>
+        </section>
+
+        <section class="section" id="p8">
+          <h2><span class="badge">8</span> 開示・訂正・削除等</h2>
+          <p>
+            利用者は、当サービスが保有する自己の個人情報について、開示・訂正・削除等を求めることができます。
+            ご希望の場合は、下記「お問い合わせ窓口」までご連絡ください。
+            本人確認のうえ、法令に従い適切に対応します。
+          </p>
+        </section>
+
+        <section class="section" id="p9">
+          <h2><span class="badge">9</span> プライバシーポリシーの変更</h2>
+          <p>
+            当サービスは、必要に応じて本ポリシーを変更することがあります。
+            変更内容は、当ページへの掲載その他適切な方法により告知します。
+          </p>
+        </section>
+
+        <section class="section" id="p10">
+          <h2><span class="badge">10</span> お問い合わせ窓口</h2>
+          <p>本ポリシーに関するお問い合わせは、以下までご連絡ください。</p>
+
+          <ul>
+            <li><strong>事業者名</strong>：山田通信コンサルティング合同会社</li>
+            <li><strong>メール</strong>：info@tymean.com</li>
+            <!-- 必要なら追記：所在地、代表者名、電話番号など -->
+          </ul>
+
+          <div class="meta">
+            <p><strong>制定日</strong>：2024年XX月XX日</p>
+            <p><strong>最終改定日</strong>：2024年XX月XX日</p>
+          </div>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer（LP と統一） -->
+  <footer class="footer" aria-label="フッター">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-paper-plane" aria-hidden="true"></i>
+          <span>AutoPost Studio</span>
+        </div>
+        <div class="footer-links">
+          <a href="index.html#contact">お問い合わせ</a>
+          <a href="terms.html">利用規約</a>
+          <a href="privacy.html">プライバシーポリシー</a>
+          <a href="tokusho.html">特定商取引法に基づく表示</a>
+          <a href="company.html">運営会社</a>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <a class="btn btn-primary" href="index.html#trial">
+            <i class="fas fa-bolt" aria-hidden="true"></i> 無料トライアル
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-copyright">
+        <p>&copy; 2024 AutoPost Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
