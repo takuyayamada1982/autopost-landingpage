@@ -2683,46 +2683,45 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('beforeunload', function () { window.scrollTo(0, 0); });
 
-    /* ===============================
-   STEP スマホ横並び完全固定
-================================ */
-@media (max-width:480px){
-
-  .step{
-    display:flex;
-    flex-direction:row;
-    align-items:flex-start;
-    gap:12px;
+   /* ==========================================
+   FIX: スマホでも「比較セクションのSTEP」は横並び固定
+   （既存の .step { flex-direction: column; } を上書き）
+   ========================================== */
+@media (max-width: 480px) {
+  .comparison .comparison-steps .step {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 12px !important;
   }
 
-  .step-number{
-    flex:0 0 36px;
-    width:36px;
-    height:36px;
+  .comparison .comparison-steps .step .step-number {
+    flex: 0 0 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0 !important;
   }
 
-  /* ← ここが今回の核心 */
-  .step-content{
-    flex:1;
-    min-width:0;
-    display:flex;
-    flex-direction:column;
+  .comparison .comparison-steps .step .step-content {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
   }
 
-  .step-content h4{
-    margin:0;
-    line-height:1.4;
-    word-break:keep-all; /* 日本語途中改行禁止 */
+  .comparison .comparison-steps .step .step-content h4 {
+    margin: 0 !important;
+    line-height: 1.35 !important;
+    word-break: keep-all !important; /* 日本語の途中改行を抑える */
   }
 
-  .step-note{
-    margin-top:4px;
-    font-size:0.9rem;
+  .comparison .comparison-steps .step .step-note {
+    margin-top: 4px !important;
   }
 }
   </script>
 </body>
 </html>
+
 
 
 
