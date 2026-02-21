@@ -2682,9 +2682,49 @@
     // ==========================================
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('beforeunload', function () { window.scrollTo(0, 0); });
+
+    /* ==========================================
+   スマホ：STEP 横並び固定（崩れ防止 完全版）
+   ========================================== */
+@media (max-width: 480px) {
+
+  .step {
+    display: flex;
+    flex-direction: row;     /* 横並び維持 */
+    align-items: flex-start; /* 上揃え */
+    gap: 12px;
+    text-align: left;
+  }
+
+  /* 番号を固定サイズにする（重要） */
+  .step-number {
+    flex: 0 0 40px;          /* ← 幅固定 */
+    width: 40px;
+    height: 40px;
+    margin: 0;
+  }
+
+  /* テキスト側を残り全部使わせる */
+  .step-content {
+    flex: 1;
+    min-width: 0;            /* ← これ超重要（改行崩れ防止） */
+  }
+
+  .step-content h4 {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+
+  .step-note {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
   </script>
 </body>
 </html>
+
 
 
 
